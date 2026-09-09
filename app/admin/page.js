@@ -546,8 +546,9 @@ export default function AdminPage() {
                     <div className="flex flex-wrap gap-3 mt-2 text-[10px] text-gray-400">
                       <span>Coupon: {banner.coupon_code || "—"}</span>
                       <span>Speed: {banner.speed}s</span>
-                      <span>BG: {banner.bg_color}</span>
-                      <span>Text: {banner.text_color}</span>
+                      <span>Shape: {banner.shape || "square"}</span>
+                      <span>Products: {banner.product_ids?.length || 0}</span>
+                      <span>Features: {(banner.features || []).join(", ")}</span>
                     </div>
                   </div>
                 ))}

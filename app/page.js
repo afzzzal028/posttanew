@@ -86,19 +86,33 @@ export default function Home() {
       {banners.length > 0 && (
       <section className="bg-gray-900 overflow-hidden">
         <div className="flex items-center gap-4 py-3 sm:py-4" style={{ animation: `marquee ${bannerSpeed}s linear infinite` }}>
-          {[...banners, ...banners, ...banners].map((b, i) => (
-            <Link key={i} href={`/products?combo=${b.coupon_code}`} className="flex-shrink-0 text-white px-4 sm:px-6 py-2 sm:py-3 flex items-center gap-3 sm:gap-4 hover:opacity-90 transition-opacity" style={{ background: b.bg_color }}>
-              <div>
-                <p className="font-bold text-xs sm:text-sm whitespace-nowrap" style={{ color: b.text_color }}>{b.title}</p>
-                <p className="text-[10px] sm:text-xs whitespace-nowrap" style={{ color: b.subtitle_color }}>+ {b.subtitle}</p>
-              </div>
-              <div className="text-right">
-                <p className="font-black text-base sm:text-lg whitespace-nowrap" style={{ color: b.text_color }}>₹{b.price}</p>
-                {b.original_price > 0 && <p className="text-[10px] sm:text-xs line-through whitespace-nowrap" style={{ color: b.text_color, opacity: 0.5 }}>₹{b.original_price}</p>}
-              </div>
-              {b.badge_text && <span className="text-[9px] sm:text-[10px] font-bold px-2 py-0.5 whitespace-nowrap" style={{ background: b.badge_color, color: b.text_color }}>{b.badge_text}</span>}
-            </Link>
-          ))}
+          {[...banners, ...banners, ...banners].map((b, i) => {
+            const features = b.features || ["badge", "savings", "coupon"];
+            const linkHref = b.product_ids?.length > 0 ? `/products?offer=${b.id}` : `/products?combo=${b.coupon_code}`;
+            const bannerStyle = { color: b.text_color };
+            if (b.shape === "gradient") bannerStyle.background = `linear-gradient(135deg, ${b.gradient_from || b.bg_color}, ${b.gradient_to || b.bg_color})`;
+            else if (b.shape === "rounded") { bannerStyle.background = b.bg_color; bannerStyle.borderRadius = "12px"; }
+            else if (b.shape === "pill") { bannerStyle.background = b.bg_color; bannerStyle.borderRadius = "999px"; }
+            else if (b.shape === "shadow") { bannerStyle.background = b.bg_color; bannerStyle.boxShadow = "0 4px 20px rgba(0,0,0,0.3)"; }
+            else if (b.shape === "outlined") { bannerStyle.border = `2px solid ${b.text_color}`; bannerStyle.background = "transparent"; }
+            else bannerStyle.background = b.bg_color;
+            return (
+              <Link key={i} href={linkHref} className="flex-shrink-0 text-white px-4 sm:px-6 py-2 sm:py-3 flex items-center gap-3 sm:gap-4 hover:opacity-90 transition-opacity" style={bannerStyle}>
+                <div className="flex-1 min-w-0">
+                  <p className="font-bold text-xs sm:text-sm whitespace-nowrap" style={{ color: b.text_color }}>{b.title}</p>
+                  {features.includes("coupon") && b.coupon_code && <p className="text-[9px] font-mono opacity-60 whitespace-nowrap" style={{ color: b.text_color }}>{b.coupon_code}</p>}
+                  <p className="text-[10px] sm:text-xs whitespace-nowrap" style={{ color: b.subtitle_color }}>+ {b.subtitle}</p>
+                </div>
+                {features.includes("price") && (
+                  <div className="text-right shrink-0">
+                    <p className="font-black text-base sm:text-lg whitespace-nowrap" style={{ color: b.text_color }}>₹{b.price}</p>
+                    {features.includes("strikethrough") && b.original_price > 0 && <p className="text-[10px] sm:text-xs line-through whitespace-nowrap" style={{ color: b.text_color, opacity: 0.5 }}>₹{b.original_price}</p>}
+                  </div>
+                )}
+                {features.includes("badge") && b.badge_text && <span className="text-[9px] sm:text-[10px] font-bold px-2 py-0.5 whitespace-nowrap shrink-0" style={{ background: b.badge_color, color: b.text_color }}>{b.badge_text}</span>}
+              </Link>
+            );
+          })}
         </div>
         <style jsx>{`@keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-33.33%); } }`}</style>
       </section>
@@ -152,21 +166,30 @@ export default function Home() {
           <span className="bg-rose-100 text-rose-700 text-[10px] sm:text-xs font-bold px-2 py-1 uppercase">Save More</span>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-          {banners.map((b) => (
-            <div key={b.id} className="bg-gray-50 border border-gray-200 p-4 sm:p-5 hover:shadow-md transition-shadow">
-              <div className="flex items-center justify-between mb-2">
-                {b.badge_text && <span className="text-white text-[10px] font-bold px-2 py-0.5" style={{ background: b.bg_color }}>{b.badge_text}</span>}
-                {b.coupon_code && <span className="text-[10px] text-gray-400 font-mono">{b.coupon_code}</span>}
+          {banners.map((b) => {
+            const features = b.features || ["badge", "savings", "coupon"];
+            const linkHref = b.product_ids?.length > 0 ? `/products?offer=${b.id}` : `/products?combo=${b.coupon_code}`;
+            return (
+              <div key={b.id} className="bg-gray-50 border border-gray-200 p-4 sm:p-5 hover:shadow-md transition-shadow">
+                <div className="flex items-center justify-between mb-2">
+                  {features.includes("badge") && b.badge_text && <span className="text-white text-[10px] font-bold px-2 py-0.5" style={{ background: b.bg_color }}>{b.badge_text}</span>}
+                  {features.includes("coupon") && b.coupon_code && <span className="text-[10px] text-gray-400 font-mono">{b.coupon_code}</span>}
+                </div>
+                <p className="text-sm sm:text-base font-bold text-gray-900 mb-1">{b.title}</p>
+                <p className="text-xs sm:text-sm text-green-600 font-medium mb-3">+ {b.subtitle}</p>
+                {features.includes("price") && (
+                  <div className="flex items-baseline gap-2 mb-3">
+                    <span className="text-xl sm:text-2xl font-black text-rose-600">₹{b.price}</span>
+                    {features.includes("strikethrough") && b.original_price > 0 && <span className="text-sm line-through text-gray-400">₹{b.original_price}</span>}
+                  </div>
+                )}
+                {b.product_ids?.length > 0 && <p className="text-[10px] text-gray-400 mb-2">{b.product_ids.length} products in this offer</p>}
+                <Link href={linkHref} className="block w-full py-2 bg-rose-600 text-white font-bold text-xs sm:text-sm text-center hover:bg-rose-700 transition-colors">
+                  {b.product_ids?.length > 0 ? "View Offer Products" : "Shop This Combo"}
+                </Link>
               </div>
-              <p className="text-sm sm:text-base font-bold text-gray-900 mb-1">{b.title}</p>
-              <p className="text-xs sm:text-sm text-green-600 font-medium mb-3">+ {b.subtitle}</p>
-              <div className="flex items-baseline gap-2 mb-3">
-                <span className="text-xl sm:text-2xl font-black text-rose-600">₹{b.price}</span>
-                {b.original_price > 0 && <span className="text-sm line-through text-gray-400">₹{b.original_price}</span>}
-              </div>
-              <Link href={`/products?combo=${b.coupon_code}`} className="block w-full py-2 bg-rose-600 text-white font-bold text-xs sm:text-sm text-center hover:bg-rose-700 transition-colors">Shop This Combo</Link>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
       )}

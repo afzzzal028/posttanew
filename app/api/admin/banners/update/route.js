@@ -29,25 +29,28 @@ export async function POST(req) {
     if (!supabase) return NextResponse.json({ success: false, error: "DB not configured" }, { status: 500 });
 
     const body = await req.json();
-    const { id, title, subtitle, price, original_price, savings, coupon_code, bg_color, text_color, subtitle_color, badge_color, badge_text, speed, active, sort_order } = body;
+    const { id, title, subtitle, price, original_price, savings, coupon_code, bg_color, text_color, subtitle_color, badge_color, badge_text, speed, active, sort_order, shape, features, product_ids, gradient_from, gradient_to } = body;
 
     if (!title) return NextResponse.json({ success: false, error: "Title is required" }, { status: 400 });
 
+    const row = {
+      title, subtitle, price, original_price, savings, coupon_code,
+      bg_color, text_color, subtitle_color, badge_color, badge_text,
+      speed, active, sort_order,
+      shape: shape || "square",
+      features: features || ["badge", "savings", "coupon"],
+      product_ids: product_ids || [],
+      gradient_from: gradient_from || "",
+      gradient_to: gradient_to || "",
+      updated_at: new Date().toISOString(),
+    };
+
     if (id) {
-      const { error } = await supabase.from("banners").update({
-        title, subtitle, price, original_price, savings, coupon_code,
-        bg_color, text_color, subtitle_color, badge_color, badge_text,
-        speed, active, sort_order, updated_at: new Date().toISOString(),
-      }).eq("id", id);
+      const { error } = await supabase.from("banners").update(row).eq("id", id);
       if (error) return NextResponse.json({ success: false, error: error.message }, { status: 500 });
       return NextResponse.json({ success: true });
     } else {
-      const { data, error } = await supabase.from("banners").insert({
-        title, subtitle, price: price || 0, original_price: original_price || 0, savings: savings || 0,
-        coupon_code: coupon_code || "", bg_color: bg_color || "#e11d48", text_color: text_color || "#ffffff",
-        subtitle_color: subtitle_color || "#86efac", badge_color: badge_color || "rgba(255,255,255,0.2)",
-        badge_text: badge_text || "", speed: speed || 30, active: active !== false, sort_order: sort_order || 0,
-      }).select();
+      const { data, error } = await supabase.from("banners").insert(row).select();
       if (error) return NextResponse.json({ success: false, error: error.message }, { status: 500 });
       return NextResponse.json({ success: true, data: data[0] });
     }
