@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400">
+  <defs>
+    <linearGradient id="wall" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#f8f9fa"/>
+      <stop offset="100%" style="stop-color:#e9ecef"/>
+    </linearGradient>
+  </defs>
+  <!-- Clean White Room -->
+  <rect width="600" height="400" fill="url(#wall)"/>
+  <!-- Floor -->
+  <rect x="0" y="310" width="600" height="90" fill="#dee2e6"/>
+  <!-- Bed -->
+  <rect x="30" y="280" width="200" height="30" fill="#adb5bd"/>
+  <rect x="30" y="260" width="200" height="25" fill="#f8f9fa" stroke="#dee2e6" stroke-width="2"/>
+  <rect x="30" y="250" width="60" height="15" fill="#e9ecef"/>
+  <!-- Pillow -->
+  <rect x="40" y="255" width="40" height="10" fill="#fff" rx="3"/>
+  <!-- Wall art grid - aesthetic collage -->
+  <rect x="300" y="40" width="120" height="80" fill="#2d3436"/>
+  <text x="360" y="85" text-anchor="middle" font-family="Georgia" font-size="12" fill="#fff" font-style="italic">HUSTLE</text>
+  
+  <rect x="430" y="40" width="80" height="80" fill="#e94560"/>
+  <text x="470" y="85" text-anchor="middle" font-family="Arial" font-size="10" fill="#fff" font-weight="bold">DREAM</text>
+  
+  <rect x="300" y="130" width="80" height="80" fill="#6c5ce7"/>
+  <text x="340" y="175" text-anchor="middle" font-family="Arial" font-size="10" fill="#fff" font-weight="bold">FOCUS</text>
+  
+  <rect x="390" y="130" width="120" height="80" fill="#00b894"/>
+  <text x="450" y="175" text-anchor="middle" font-family="Arial" font-size="10" fill="#fff" font-weight="bold">GRIND</text>
+  
+  <!-- Small cards -->
+  <rect x="300" y="220" width="40" height="55" fill="#fd79a8"/>
+  <rect x="345" y="220" width="40" height="55" fill="#0984e3"/>
+  <rect x="390" y="220" width="40" height="55" fill="#fdcb6e"/>
+  <rect x="435" y="220" width="40" height="55" fill="#00cec9"/>
+  <rect x="480" y="220" width="40" height="55" fill="#e17055"/>
+  
+  <!-- Nightstand -->
+  <rect x="240" y="270" width="50" height="40" fill="#adb5bd"/>
+  <!-- Lamp -->
+  <rect x="255" y="250" width="20" height="20" fill="#f8f9fa"/>
+  <rect x="260" y="240" width="10" height="15" fill="#dee2e6"/>
+  <!-- Light glow -->
+  <circle cx="265" cy="245" r="30" fill="#fdcb6e" opacity="0.15"/>
+</svg>

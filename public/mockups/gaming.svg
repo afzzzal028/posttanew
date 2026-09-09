@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6c5ce7"/>
+      <stop offset="100%" style="stop-color:#a29bfe"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="400" fill="url(#bg)" rx="16"/>
+  <!-- Controller -->
+  <rect x="120" y="150" width="160" height="100" rx="25" fill="#2d3436"/>
+  <rect x="130" y="160" width="140" height="80" rx="20" fill="#636e72"/>
+  <!-- Buttons -->
+  <circle cx="240" cy="185" r="10" fill="#e94560"/>
+  <circle cx="260" cy="205" r="10" fill="#00b894"/>
+  <circle cx="220" cy="205" r="10" fill="#0984e3"/>
+  <circle cx="240" cy="225" r="10" fill="#fdcb6e"/>
+  <!-- D-pad -->
+  <rect x="145" y="185" width="8" height="30" rx="2" fill="#dfe6e9"/>
+  <rect x="135" y="195" width="30" height="8" rx="2" fill="#dfe6e9"/>
+  <!-- Joysticks -->
+  <circle cx="170" cy="220" r="12" fill="#2d3436"/>
+  <circle cx="170" cy="220" r="8" fill="#636e72"/>
+  <!-- Screen glow -->
+  <rect x="140" y="100" width="120" height="60" rx="8" fill="#0a0a1a" opacity="0.8"/>
+  <rect x="145" y="105" width="110" height="50" rx="5" fill="#00b894" opacity="0.3"/>
+  <!-- Pixel art on screen -->
+  <rect x="160" y="115" width="8" height="8" fill="#e94560"/>
+  <rect x="170" y="115" width="8" height="8" fill="#0984e3"/>
+  <rect x="180" y="115" width="8" height="8" fill="#00b894"/>
+  <rect x="190" y="115" width="8" height="8" fill="#fdcb6e"/>
+  <rect x="200" y="115" width="8" height="8" fill="#e94560"/>
+  <rect x="210" y="115" width="8" height="8" fill="#0984e3"/>
+  <!-- Floating pixels -->
+  <rect x="50" y="80" width="10" height="10" fill="#00b894" opacity="0.6"/>
+  <rect x="320" y="120" width="8" height="8" fill="#e94560" opacity="0.5"/>
+  <rect x="80" y="300" width="12" height="12" fill="#fdcb6e" opacity="0.4"/>
+  <rect x="300" y="280" width="6" height="6" fill="#0984e3" opacity="0.6"/>
+  <!-- Text -->
+  <text x="200" y="330" text-anchor="middle" font-family="Arial Black, sans-serif" font-size="32" font-weight="900" fill="#ffffff">GAMING</text>
+  <text x="200" y="355" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#ffeaa7" letter-spacing="6">PLAY ON</text>
+</svg>

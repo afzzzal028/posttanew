@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400">
+  <defs>
+    <linearGradient id="wall" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#2d3436"/>
+      <stop offset="100%" style="stop-color:#1a1a2e"/>
+    </linearGradient>
+  </defs>
+  <!-- Dark Room -->
+  <rect width="600" height="400" fill="url(#wall)"/>
+  <!-- Floor -->
+  <rect x="0" y="320" width="600" height="80" fill="#1a1a1a"/>
+  <!-- Neon glow effect -->
+  <circle cx="300" cy="180" r="150" fill="#e94560" opacity="0.05"/>
+  <circle cx="300" cy="180" r="100" fill="#e94560" opacity="0.08"/>
+  <!-- Posters grid -->
+  <rect x="60" y="50" width="90" height="130" fill="#e94560" opacity="0.9"/>
+  <text x="105" y="120" text-anchor="middle" font-family="Arial" font-size="10" fill="#fff" font-weight="bold">BATMAN</text>
+  
+  <rect x="160" y="50" width="90" height="130" fill="#6c5ce7" opacity="0.9"/>
+  <text x="205" y="120" text-anchor="middle" font-family="Arial" font-size="10" fill="#fff" font-weight="bold">DRAGON BALL</text>
+  
+  <rect x="260" y="50" width="90" height="130" fill="#00b894" opacity="0.9"/>
+  <text x="305" y="120" text-anchor="middle" font-family="Arial" font-size="10" fill="#fff" font-weight="bold">GTA V</text>
+  
+  <rect x="360" y="50" width="90" height="130" fill="#fd79a8" opacity="0.9"/>
+  <text x="405" y="120" text-anchor="middle" font-family="Arial" font-size="10" fill="#fff" font-weight="bold">SPIDER-MAN</text>
+  
+  <rect x="460" y="50" width="90" height="130" fill="#fdcb6e" opacity="0.9"/>
+  <text x="505" y="120" text-anchor="middle" font-family="Arial" font-size="10" fill="#2d3436" font-weight="bold">F1</text>
+  
+  <!-- Bottom row -->
+  <rect x="100" y="200" width="70" height="100" fill="#0984e3" opacity="0.9"/>
+  <rect x="180" y="200" width="70" height="100" fill="#e17055" opacity="0.9"/>
+  <rect x="260" y="200" width="70" height="100" fill="#00cec9" opacity="0.9"/>
+  <rect x="340" y="200" width="70" height="100" fill="#a29bfe" opacity="0.9"/>
+  <rect x="420" y="200" width="70" height="100" fill="#ff7675" opacity="0.9"/>
+  
+  <!-- Gaming setup -->
+  <rect x="200" y="320" width="200" height="10" fill="#636e72"/>
+  <rect x="230" y="270" width="60" height="50" fill="#0a0a1a"/>
+  <rect x="310" y="270" width="60" height="50" fill="#0a0a1a"/>
+  <rect x="260" y="320" width="80" height="5" fill="#636e72"/>
+  <!-- LED strip -->
+  <rect x="0" y="318" width="600" height="3" fill="#e94560" opacity="0.6"/>
+</svg>

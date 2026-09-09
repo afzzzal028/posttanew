@@ -1,0 +1,131 @@
+export const categories = [
+  { id: "cars", name: "Cars & Bikes", icon: "🏎️", description: "Supercars, Muscle Cars, JDM & More" },
+  { id: "anime", name: "Anime", icon: "⚔️", description: "Naruto, One Piece, Dragon Ball & More" },
+  { id: "gaming", name: "Gaming", icon: "🎮", description: "GTA, Valorant, Minecraft & More" },
+  { id: "sports", name: "Sports", icon: "⚽", description: "Football, Cricket, F1 & More" },
+  { id: "marvel", name: "Marvel", icon: "🦸", description: "Avengers, Spider-Man, Iron Man & More" },
+  { id: "dc", name: "DC", icon: "🦇", description: "Batman, Joker, Superman & More" },
+  { id: "movies", name: "Movies", icon: "🎬", description: "Fight Club, Interstellar & More" },
+  { id: "music", name: "Music", icon: "🎵", description: "Hip-Hop, Vinyl, Aesthetic & More" },
+  { id: "motivational", name: "Motivational", icon: "💪", description: "Hustle, Discipline, Grind & More" },
+  { id: "devotional", name: "Devotional", icon: "🕉️", description: "Bhagavad Gita, Hanuman & More" },
+];
+
+export const sizes = {
+  A6: { label: "A6 Card", dimensions: "10.5 × 14.8 cm", priceKey: "A6" },
+  A5: { label: "A5 Poster", dimensions: "14.8 × 21 cm", priceKey: "A5" },
+  A4: { label: "A4 Poster", dimensions: "21 × 29.7 cm", priceKey: "A4" },
+  A3: { label: "A3 Poster", dimensions: "29.7 × 42 cm", priceKey: "A3" },
+};
+
+export const products = [
+  // CARS & BIKES
+  { id: "porsche-911-gt3-rs", name: "Porsche 911 GT3 RS", category: "cars", subcategory: "concept-cars", tags: ["porsche", "sports-car", "racing"], colors: ["white", "black"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "bmw-m4-dominance", name: "BMW M4 Dominance", category: "cars", subcategory: "solid-cars", tags: ["bmw", "luxury", "german"], colors: ["black", "blue"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "nissan-skyline-r34", name: "Nissan Skyline R34", category: "cars", subcategory: "concept-cars", tags: ["nissan", "jdm", "fast-furious"], colors: ["blue", "black"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "ford-mustang-1969", name: "Ford Mustang 1969", category: "cars", subcategory: "solid-cars", tags: ["ford", "muscle", "classic"], colors: ["red", "black"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "lamborghini-aventador", name: "Lamborghini Aventador", category: "cars", subcategory: "concept-cars", tags: ["lamborghini", "supercar", "italian"], colors: ["yellow", "green"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "ferrari-f40", name: "Ferrari F40 Competizione", category: "cars", subcategory: "concept-cars", tags: ["ferrari", "classic", "racing"], colors: ["red", "white"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "mercedes-amg-gt", name: "Mercedes AMG GT", category: "cars", subcategory: "solid-cars", tags: ["mercedes", "amg", "luxury"], colors: ["silver", "black"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "dodge-charger", name: "Dodge Charger Classic", category: "cars", subcategory: "solid-cars", tags: ["dodge", "muscle", "american"], colors: ["black", "blue"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "toyota-supra-mk4", name: "Toyota Supra MK4", category: "cars", subcategory: "concept-cars", tags: ["toyota", "jdm", "drift"], colors: ["orange", "white"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "bmw-m2-vector", name: "BMW M2 Vector Style", category: "cars", subcategory: "vector-car", tags: ["bmw", "vector", "art"], colors: ["white", "black"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "gtr-vector", name: "Nissan GTR Vector Art", category: "cars", subcategory: "vector-car", tags: ["nissan", "gtr", "vector"], colors: ["black", "red"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "defender-snowline", name: "Land Rover Defender", category: "cars", subcategory: "solid-cars", tags: ["land-rover", "suv", "offroad"], colors: ["white", "green"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "kawasaki-ninja", name: "Kawasaki Ninja H2R", category: "cars", subcategory: "bikes", tags: ["kawasaki", "bike", "racing"], colors: ["green", "black"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "ducati-panigale", name: "Ducati Panigale V4", category: "cars", subcategory: "bikes", tags: ["ducati", "bike", "italian"], colors: ["red", "white"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "yamaha-r15", name: "Yamaha R15 M", category: "cars", subcategory: "bikes", tags: ["yamaha", "bike", "indian"], colors: ["blue", "black"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+
+  // ANIME
+  { id: "naruto-sage-mode", name: "Naruto Sage Mode", category: "anime", subcategory: "naruto", tags: ["naruto", "sage", "shippuden"], colors: ["orange", "blue"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "luffy-gear-5", name: "Luffy Gear 5", category: "anime", subcategory: "one-piece", tags: ["luffy", "one-piece", "gear-5"], colors: ["white", "red"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "goku-ultra-instinct", name: "Goku Ultra Instinct", category: "anime", subcategory: "dragon-ball", tags: ["goku", "dragon-ball", "ultra-instinct"], colors: ["silver", "blue"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "gojo-satoru", name: "Gojo Satoru", category: "anime", subcategory: "jujutsu-kaisen", tags: ["gojo", "jujutsu-kaisen", "blindfold"], colors: ["blue", "white"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "levi-ackerman", name: "Levi Ackerman", category: "anime", subcategory: "attack-on-titan", tags: ["levi", "attack-on-titan", "captain"], colors: ["black", "white"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "sasuke-sharingan", name: "Sasuke Sharingan", category: "anime", subcategory: "naruto", tags: ["sasuke", "sharingan", "uchiha"], colors: ["red", "black"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "tanjiro-water-breathing", name: "Tanjiro Water Breathing", category: "anime", subcategory: "demon-slayer", tags: ["tanjiro", "demon-slayer", "water"], colors: ["blue", "green"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "zoro-three-swords", name: "Zoro Three Sword Style", category: "anime", subcategory: "one-piece", tags: ["zoro", "one-piece", "swordsman"], colors: ["green", "black"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "itachi-crows", name: "Itachi Uchiha Crows", category: "anime", subcategory: "naruto", tags: ["itachi", "uchiha", "crows"], colors: ["red", "black"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "eren-titan", name: "Eren Founding Titan", category: "anime", subcategory: "attack-on-titan", tags: ["eren", "titan", "final-season"], colors: ["green", "red"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "megumi-phantom", name: "Megumi Phantom Beast", category: "anime", subcategory: "jujutsu-kaisen", tags: ["megumi", "jujutsu-kaisen", "shikigami"], colors: ["blue", "black"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "killua-godspeed", name: "Killua Godspeed", category: "anime", subcategory: "hunter-x-hunter", tags: ["killua", "hunter", "lightning"], colors: ["blue", "white"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+
+  // GAMING
+  { id: "gta-v-finance", name: "GTA V Los Santos", category: "gaming", subcategory: "gta", tags: ["gta", "rockstar", "los-santos"], colors: ["green", "black"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "valorant-jett", name: "Valorant Jett", category: "gaming", subcategory: "valorant", tags: ["valorant", "jett", "agent"], colors: ["blue", "white"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "minecraft-creeper", name: "Minecraft Creeper", category: "gaming", subcategory: "minecraft", tags: ["minecraft", "creeper", "pixel"], colors: ["green", "brown"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "god-of-war-kratos", name: "God of War Kratos", category: "gaming", subcategory: "action", tags: ["kratos", "god-of-war", "nordic"], colors: ["grey", "red"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "cyberpunk-v", name: "Cyberpunk 2077", category: "gaming", subcategory: "rpg", tags: ["cyberpunk", "night-city", "futuristic"], colors: ["yellow", "blue"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "spider-man-miles", name: "Spider-Man Miles Morales", category: "gaming", subcategory: "action", tags: ["spider-man", "playstation", "insomniac"], colors: ["red", "black"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "pubg-m416", name: "PUBG M416 Skin", category: "gaming", subcategory: "fps", tags: ["pubg", "m416", "weapon"], colors: ["green", "black"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "free-fire-battle", name: "Free Fire Battle", category: "gaming", subcategory: "battle-royale", tags: ["free-fire", "battle-royale", "fire"], colors: ["orange", "blue"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "elden-ring", name: "Elden Ring Shadow", category: "gaming", subcategory: "rpg", tags: ["elden-ring", "from-software", "dark-fantasy"], colors: ["gold", "black"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "call-of-duty-ghost", name: "Call of Duty Ghost", category: "gaming", subcategory: "fps", tags: ["cod", "ghost", "military"], colors: ["grey", "black"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+
+  // SPORTS
+  { id: "ronaldo-goat", name: "Cristiano Ronaldo GOAT", category: "sports", subcategory: "football", tags: ["ronaldo", "football", "goat"], colors: ["red", "black"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "messi-world-cup", name: "Messi World Cup 2022", category: "sports", subcategory: "football", tags: ["messi", "argentina", "world-cup"], colors: ["blue", "white"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "virat-kohli-18", name: "Virat Kohli #18", category: "sports", subcategory: "cricket", tags: ["virat", "cricket", "india"], colors: ["blue", "gold"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "ms-dhoni-7", name: "MS Dhoni #7 Captain", category: "sports", subcategory: "cricket", tags: ["dhoni", "cricket", "captain"], colors: ["yellow", "blue"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "f1-verstappen", name: "Max Verstappen #1", category: "sports", subcategory: "f1", tags: ["f1", "verstappen", "red-bull"], colors: ["blue", "yellow"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "lebron-lakers", name: "LeBron James Lakers", category: "sports", subcategory: "basketball", tags: ["lebron", "lakers", "nba"], colors: ["purple", "gold"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "neymar-skills", name: "Neymar Skills", category: "sports", subcategory: "football", tags: ["neymar", "football", "skills"], colors: ["yellow", "green"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "sachin-tendulkar", name: "Sachin Tendulkar", category: "sports", subcategory: "cricket", tags: ["sachin", "cricket", "legend"], colors: ["blue", "white"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "ufc-mcgregor", name: "Conor McGregor", category: "sports", subcategory: "ufc", tags: ["mcgregor", "ufc", "champion"], colors: ["green", "black"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "hamilton-mercedes", name: "Lewis Hamilton Mercedes", category: "sports", subcategory: "f1", tags: ["hamilton", "mercedes", "f1"], colors: ["silver", "teal"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+
+  // MARVEL
+  { id: "iron-man-arc-reactor", name: "Iron Man Arc Reactor", category: "marvel", subcategory: "avengers", tags: ["iron-man", "marvel", "avengers"], colors: ["red", "gold"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "spider-man-no-way", name: "Spider-Man No Way Home", category: "marvel", subcategory: "spider-man", tags: ["spider-man", "tom-holland", "no-way-home"], colors: ["red", "blue"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "thor-ragnarok", name: "Thor Ragnarok", category: "marvel", subcategory: "avengers", tags: ["thor", "avengers", "ragnarok"], colors: ["blue", "red"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "captain-america", name: "Captain America Shield", category: "marvel", subcategory: "avengers", tags: ["captain-america", "shield", "avengers"], colors: ["blue", "red"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "black-panther", name: "Black Panther", category: "marvel", subcategory: "avengers", tags: ["black-panther", "wakanda", "avengers"], colors: ["black", "purple"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "wolverine-claws", name: "Wolverine Claws", category: "marvel", subcategory: "x-men", tags: ["wolverine", "x-men", "claws"], colors: ["yellow", "blue"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "deadpool", name: "Deadpool 4th Wall", category: "marvel", subcategory: "deadpool", tags: ["deadpool", "marvel", "comedy"], colors: ["red", "black"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+
+  // DC
+  { id: "batman-dark-knight", name: "Batman Dark Knight", category: "dc", subcategory: "batman", tags: ["batman", "dc", "dark-knight"], colors: ["black", "grey"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "joker-heath", name: "Joker Heath Ledger", category: "dc", subcategory: "villains", tags: ["joker", "dc", "dark-knight"], colors: ["purple", "green"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "superman-classic", name: "Superman Classic", category: "dc", subcategory: "justice-league", tags: ["superman", "dc", "justice-league"], colors: ["blue", "red"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "flash-speed", name: "The Flash Speed", category: "dc", subcategory: "justice-league", tags: ["flash", "dc", "speed"], colors: ["red", "yellow"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "aquaman", name: "Aquaman King", category: "dc", subcategory: "justice-league", tags: ["aquaman", "dc", "ocean"], colors: ["green", "gold"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+
+  // MOVIES
+  { id: "fight-club", name: "Fight Club Rules", category: "movies", subcategory: "thriller", tags: ["fight-club", "brad-pitt", "david-fincher"], colors: ["red", "black"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "interstellar", name: "Interstellar Space", category: "movies", subcategory: "sci-fi", tags: ["interstellar", "nolan", "space"], colors: ["blue", "black"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "dark-knight-rises", name: "Dark Knight Rises", category: "movies", subcategory: "action", tags: ["batman", "nolan", "rises"], colors: ["black", "grey"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "avengers-endgame", name: "Avengers Endgame", category: "movies", subcategory: "marvel", tags: ["avengers", "marvel", "endgame"], colors: ["blue", "gold"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "inception", name: "Inception Dream", category: "movies", subcategory: "sci-fi", tags: ["inception", "nolan", "dream"], colors: ["grey", "blue"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "joker-2019", name: "Joker 2019", category: "movies", subcategory: "drama", tags: ["joker", "phoenix", "dc"], colors: ["red", "purple"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "oppenheimer", name: "Oppenheimer", category: "movies", subcategory: "drama", tags: ["oppenheimer", "nolan", "atomic"], colors: ["orange", "black"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+
+  // MUSIC
+  { id: "eminem-lose-yourself", name: "Eminem Lose Yourself", category: "music", subcategory: "hip-hop", tags: ["eminem", "hip-hop", "rap"], colors: ["black", "white"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "travis-scott", name: "Travis Scott Astroworld", category: "music", subcategory: "hip-hop", tags: ["travis-scott", "astroworld", "rap"], colors: ["red", "black"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "kanye-west", name: "Kanye West Donda", category: "music", subcategory: "hip-hop", tags: ["kanye", "donda", "rap"], colors: ["black", "white"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "drake", name: "Drake Certified Lover", category: "music", subcategory: "hip-hop", tags: ["drake", "hip-hop", "rap"], colors: ["pink", "white"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "vinyl-aesthetic", name: "Vinyl Record Aesthetic", category: "music", subcategory: "aesthetic", tags: ["vinyl", "retro", "aesthetic"], colors: ["black", "brown"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "beats-headphones", name: "Beats Headphones Art", category: "music", subcategory: "aesthetic", tags: ["beats", "headphones", "music"], colors: ["red", "black"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+
+  // MOTIVATIONAL
+  { id: "hustle-grind", name: "Hustle & Grind", category: "motivational", subcategory: "hustle", tags: ["hustle", "grind", "motivation"], colors: ["black", "gold"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "discipline-equals-freedom", name: "Discipline Equals Freedom", category: "motivational", subcategory: "discipline", tags: ["discipline", "freedom", "jocko"], colors: ["black", "red"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "never-give-up", name: "Never Give Up", category: "motivational", subcategory: "mindset", tags: ["never-give-up", "mindset", "motivation"], colors: ["black", "white"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "wolf-wall-street", name: "Wolf of Wall Street", category: "motivational", subcategory: "hustle", tags: ["wolf", "wall-street", "money"], colors: ["gold", "black"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "gym-bear", name: "Gym Motivation Bear", category: "motivational", subcategory: "gym", tags: ["gym", "bear", "motivation"], colors: ["black", "red"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "mindset-shift", name: "Mindset Is Everything", category: "motivational", subcategory: "mindset", tags: ["mindset", "shift", "growth"], colors: ["black", "gold"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+
+  // DEVOTIONAL
+  { id: "krishna-flute", name: "Krishna Flute", category: "devotional", subcategory: "hindu", tags: ["krishna", "flute", "divine"], colors: ["blue", "yellow"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "hanuman-chalisa", name: "Hanuman Chalisa", category: "devotional", subcategory: "hindu", tags: ["hanuman", "chalisa", "strength"], colors: ["orange", "red"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "ganesha-blessings", name: "Ganesha Blessings", category: "devotional", subcategory: "hindu", tags: ["ganesha", "blessings", "remover"], colors: ["red", "gold"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "bhagavad-gita", name: "Bhagavad Gita Quote", category: "devotional", subcategory: "hindu", tags: ["gita", "krishna", "wisdom"], colors: ["orange", "white"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "shiva-meditation", name: "Shiva Meditation", category: "devotional", subcategory: "hindu", tags: ["shiva", "meditation", "peace"], colors: ["blue", "white"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "rama-bow", name: "Lord Rama Bow Arrow", category: "devotional", subcategory: "hindu", tags: ["rama", "arrow", "dharma"], colors: ["gold", "green"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+];
+
+export const bundleOffers = [
+  { id: "bundle-5", cards: 5, price: 119, label: "5 Cards", savings: 26 },
+  { id: "bundle-10", cards: 10, price: 169, label: "10 Cards", savings: 121 },
+  { id: "bundle-20", cards: 20, price: 239, label: "20 Cards", savings: 341 },
+];

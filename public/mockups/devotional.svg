@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f39c12"/>
+      <stop offset="100%" style="stop-color:#e67e22"/>
+    </linearGradient>
+    <linearGradient id="om" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff"/>
+      <stop offset="100%" style="stop-color:#f1c40f"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="400" fill="url(#bg)" rx="16"/>
+  <!-- Lotus base -->
+  <ellipse cx="200" cy="300" rx="80" ry="20" fill="#e74c3c" opacity="0.6"/>
+  <!-- Lotus petals -->
+  <path d="M200 280 Q180 260 160 280 Q180 300 200 280" fill="#e74c3c"/>
+  <path d="M200 280 Q220 260 240 280 Q220 300 200 280" fill="#e74c3c"/>
+  <path d="M200 280 Q160 250 140 280 Q160 310 200 280" fill="#c0392b"/>
+  <path d="M200 280 Q240 250 260 280 Q240 310 200 280" fill="#c0392b"/>
+  <path d="M200 280 Q140 240 120 280 Q140 320 200 280" fill="#e74c3c" opacity="0.7"/>
+  <path d="M200 280 Q260 240 280 280 Q260 320 200 280" fill="#e74c3c" opacity="0.7"/>
+  <!-- Om symbol -->
+  <text x="200" y="200" text-anchor="middle" font-family="serif" font-size="100" fill="url(#om)">ॐ</text>
+  <!-- Glow effect -->
+  <circle cx="200" cy="180" r="100" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.2"/>
+  <circle cx="200" cy="180" r="80" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.15"/>
+  <circle cx="200" cy="180" r="120" fill="none" stroke="#ffffff" stroke-width="1" opacity="0.1"/>
+  <!-- Sparkles -->
+  <circle cx="100" cy="100" r="3" fill="#ffffff" opacity="0.6"/>
+  <circle cx="300" cy="80" r="2" fill="#ffffff" opacity="0.5"/>
+  <circle cx="80" cy="250" r="2" fill="#ffffff" opacity="0.4"/>
+  <circle cx="320" cy="230" r="3" fill="#ffffff" opacity="0.5"/>
+  <!-- Text -->
+  <text x="200" y="360" text-anchor="middle" font-family="Arial Black, sans-serif" font-size="24" font-weight="900" fill="#ffffff">DIVINE</text>
+  <text x="200" y="385" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#ffffff" letter-spacing="6">BLESSINGS</text>
+</svg>

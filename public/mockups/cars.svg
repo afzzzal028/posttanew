@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e"/>
+      <stop offset="100%" style="stop-color:#16213e"/>
+    </linearGradient>
+    <linearGradient id="car" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#e94560"/>
+      <stop offset="100%" style="stop-color:#ff6b6b"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="400" fill="url(#bg)" rx="16"/>
+  <!-- Road -->
+  <rect x="0" y="280" width="400" height="120" fill="#2d3436"/>
+  <rect x="0" y="290" width="400" height="4" fill="#636e72" opacity="0.5"/>
+  <line x1="40" y1="292" x2="80" y2="292" stroke="#ffeaa7" stroke-width="3" stroke-dasharray="20,15"/>
+  <line x1="140" y1="292" x2="180" y2="292" stroke="#ffeaa7" stroke-width="3" stroke-dasharray="20,15"/>
+  <line x1="240" y1="292" x2="280" y2="292" stroke="#ffeaa7" stroke-width="3" stroke-dasharray="20,15"/>
+  <line x1="340" y1="292" x2="380" y2="292" stroke="#ffeaa7" stroke-width="3" stroke-dasharray="20,15"/>
+  <!-- Car body -->
+  <ellipse cx="200" cy="250" rx="120" ry="35" fill="url(#car)"/>
+  <rect x="100" y="220" width="200" height="35" rx="15" fill="url(#car)"/>
+  <!-- Windows -->
+  <path d="M130 220 L160 190 L240 190 L270 220" fill="#0a0a1a" opacity="0.8"/>
+  <line x1="200" y1="190" x2="200" y2="220" stroke="#1a1a2e" stroke-width="2"/>
+  <!-- Wheels -->
+  <circle cx="140" cy="260" r="25" fill="#2d3436"/>
+  <circle cx="140" cy="260" r="15" fill="#636e72"/>
+  <circle cx="140" cy="260" r="5" fill="#dfe6e9"/>
+  <circle cx="260" cy="260" r="25" fill="#2d3436"/>
+  <circle cx="260" cy="260" r="15" fill="#636e72"/>
+  <circle cx="260" cy="260" r="5" fill="#dfe6e9"/>
+  <!-- Headlights -->
+  <ellipse cx="95" cy="245" rx="8" ry="5" fill="#ffeaa7"/>
+  <ellipse cx="305" cy="245" rx="8" ry="5" fill="#ff7675"/>
+  <!-- Speed lines -->
+  <line x1="20" y1="230" x2="60" y2="230" stroke="#e94560" stroke-width="2" opacity="0.6"/>
+  <line x1="10" y1="245" x2="50" y2="245" stroke="#e94560" stroke-width="2" opacity="0.4"/>
+  <line x1="25" y1="260" x2="55" y2="260" stroke="#e94560" stroke-width="2" opacity="0.3"/>
+  <!-- Stars -->
+  <circle cx="50" cy="50" r="2" fill="#ffeaa7" opacity="0.8"/>
+  <circle cx="150" cy="30" r="1.5" fill="#dfe6e9" opacity="0.6"/>
+  <circle cx="320" cy="60" r="2" fill="#ffeaa7" opacity="0.7"/>
+  <circle cx="370" cy="20" r="1" fill="#dfe6e9" opacity="0.5"/>
+  <circle cx="80" cy="80" r="1.5" fill="#ffeaa7" opacity="0.4"/>
+  <!-- Text -->
+  <text x="200" y="140" text-anchor="middle" font-family="Arial Black, sans-serif" font-size="28" font-weight="900" fill="#ffffff">SPEED</text>
+  <text x="200" y="165" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#e94560" letter-spacing="8">PERFORMANCE</text>
+</svg>
