@@ -38,7 +38,7 @@ export default function TermsPage() {
         </div>
         <div>
           <h2 className="text-lg font-bold text-gray-900 mb-2">9. Contact</h2>
-          <p>For any queries, contact us on Instagram <a href="https://www.instagram.com/itnahithajotha" className="text-rose-600">@itnahithajotha</a> or call +91 9335748094.</p>
+          <p>For any queries, contact us on Instagram <a href="https://www.instagram.com/postta.in" className="text-rose-600">@postta.in</a>, WhatsApp <a href="https://wa.me/919335748094" className="text-rose-600">+91 9335748094</a>, or call +91 9335748094.</p>
         </div>
       </div>
     </div>

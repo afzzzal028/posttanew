@@ -5,13 +5,6 @@ import ProductCard from "@/components/ProductCard";
 import { categories } from "@/data/products";
 import { useState, useEffect } from "react";
 
-const comboOffers = [
-  { id: "combo-1", title: "Buy 2 A3 Posters", subtitle: "Get 1 A4 + 2 A6 Cards + 1 Mystery Poster FREE", price: 358, originalPrice: 497, savings: 139, color: "bg-rose-600", items: ["2× A3 Poster", "1× A4 Poster (FREE)", "2× A6 Cards (FREE)", "1× Mystery Poster (FREE)"], coupon: "COMBO2A3" },
-  { id: "combo-2", title: "Buy 3 A4 Posters", subtitle: "Get 1 A5 + 3 A6 Cards + 1 Mystery Poster FREE", price: 387, originalPrice: 574, savings: 187, color: "bg-gray-900", items: ["3× A4 Poster", "1× A5 Poster (FREE)", "3× A6 Cards (FREE)", "1× Mystery Poster (FREE)"], coupon: "COMBO3A4" },
-  { id: "combo-3", title: "Buy 5 A4 Posters", subtitle: "Get 2 A5 + 5 A6 Cards + 1 Mystery Poster FREE", price: 645, originalPrice: 961, savings: 316, color: "bg-amber-600", items: ["5× A4 Poster", "2× A5 Poster (FREE)", "5× A6 Cards (FREE)", "1× Mystery Poster (FREE)"], coupon: "COMBO5A4" },
-  { id: "combo-4", title: "Buy 3 A3 Posters", subtitle: "Get 2 A4 + 5 A6 Cards + 1 Mystery Poster FREE", price: 537, originalPrice: 811, savings: 274, color: "bg-emerald-600", items: ["3× A3 Poster", "2× A4 Poster (FREE)", "5× A6 Cards (FREE)", "1× Mystery Poster (FREE)"], coupon: "COMBO3A3" },
-];
-
 const rooms = [
   { id: 1, src: "/mockups/room-1.svg", title: "Car enthusiastSetup", desc: "16 A4 posters + 6 A6 cards" },
   { id: 2, src: "/mockups/room-2.svg", title: "Gaming Room Dark", desc: "20 A4 posters + 10 A6 cards" },
@@ -20,12 +13,23 @@ const rooms = [
 
 export default function Home() {
   const [products, setProducts] = useState([]);
+  const [banners, setBanners] = useState([]);
+  const [bannerSpeed, setBannerSpeed] = useState(30);
 
   useEffect(() => {
     fetch("/api/products")
       .then((res) => res.json())
       .then((data) => {
         if (data.success) setProducts(data.data);
+      })
+      .catch(() => {});
+    fetch("/api/banners")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          setBanners(data.data || []);
+          if (data.speed) setBannerSpeed(data.speed);
+        }
       })
       .catch(() => {});
   }, []);
@@ -79,24 +83,26 @@ export default function Home() {
       </section>
 
       {/* Marquee Combo Offers */}
+      {banners.length > 0 && (
       <section className="bg-gray-900 overflow-hidden">
-        <div className="flex items-center gap-4 py-3 sm:py-4" style={{ animation: "marquee 30s linear infinite" }}>
-          {[...comboOffers, ...comboOffers, ...comboOffers].map((combo, i) => (
-            <Link key={i} href={`/products?combo=${combo.coupon}`} className={`flex-shrink-0 ${combo.color} text-white px-4 sm:px-6 py-2 sm:py-3 flex items-center gap-3 sm:gap-4 hover:opacity-90 transition-opacity`}>
+        <div className="flex items-center gap-4 py-3 sm:py-4" style={{ animation: `marquee ${bannerSpeed}s linear infinite` }}>
+          {[...banners, ...banners, ...banners].map((b, i) => (
+            <Link key={i} href={`/products?combo=${b.coupon_code}`} className="flex-shrink-0 text-white px-4 sm:px-6 py-2 sm:py-3 flex items-center gap-3 sm:gap-4 hover:opacity-90 transition-opacity" style={{ background: b.bg_color }}>
               <div>
-                <p className="font-bold text-xs sm:text-sm whitespace-nowrap">{combo.title}</p>
-                <p className="text-[10px] sm:text-xs text-green-300 whitespace-nowrap">+ {combo.subtitle}</p>
+                <p className="font-bold text-xs sm:text-sm whitespace-nowrap" style={{ color: b.text_color }}>{b.title}</p>
+                <p className="text-[10px] sm:text-xs whitespace-nowrap" style={{ color: b.subtitle_color }}>+ {b.subtitle}</p>
               </div>
               <div className="text-right">
-                <p className="font-black text-base sm:text-lg whitespace-nowrap">₹{combo.price}</p>
-                <p className="text-[10px] sm:text-xs line-through opacity-50 whitespace-nowrap">₹{combo.originalPrice}</p>
+                <p className="font-black text-base sm:text-lg whitespace-nowrap" style={{ color: b.text_color }}>₹{b.price}</p>
+                {b.original_price > 0 && <p className="text-[10px] sm:text-xs line-through whitespace-nowrap" style={{ color: b.text_color, opacity: 0.5 }}>₹{b.original_price}</p>}
               </div>
-              <span className="bg-white/20 text-[9px] sm:text-[10px] font-bold px-2 py-0.5 whitespace-nowrap">SAVE ₹{combo.savings}</span>
+              {b.badge_text && <span className="text-[9px] sm:text-[10px] font-bold px-2 py-0.5 whitespace-nowrap" style={{ background: b.badge_color, color: b.text_color }}>{b.badge_text}</span>}
             </Link>
           ))}
         </div>
         <style jsx>{`@keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-33.33%); } }`}</style>
       </section>
+      )}
 
       {/* Room Inspiration */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
@@ -139,37 +145,31 @@ export default function Home() {
       </section>
 
       {/* Combo Offers Detail */}
+      {banners.length > 0 && (
       <section className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
         <div className="flex items-center justify-between mb-4 sm:mb-6">
           <h2 className="text-xl sm:text-2xl font-black text-gray-900">Combo Offers</h2>
           <span className="bg-rose-100 text-rose-700 text-[10px] sm:text-xs font-bold px-2 py-1 uppercase">Save More</span>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-          {comboOffers.map((combo) => (
-            <div key={combo.id} className="bg-gray-50 border border-gray-200 p-4 sm:p-5 hover:shadow-md transition-shadow">
+          {banners.map((b) => (
+            <div key={b.id} className="bg-gray-50 border border-gray-200 p-4 sm:p-5 hover:shadow-md transition-shadow">
               <div className="flex items-center justify-between mb-2">
-                <span className={`${combo.color} text-white text-[10px] font-bold px-2 py-0.5`}>SAVE ₹{combo.savings}</span>
-                <span className="text-[10px] text-gray-400 font-mono">{combo.coupon}</span>
+                {b.badge_text && <span className="text-white text-[10px] font-bold px-2 py-0.5" style={{ background: b.bg_color }}>{b.badge_text}</span>}
+                {b.coupon_code && <span className="text-[10px] text-gray-400 font-mono">{b.coupon_code}</span>}
               </div>
-              <p className="text-sm sm:text-base font-bold text-gray-900 mb-1">{combo.title}</p>
-              <p className="text-xs sm:text-sm text-green-600 font-medium mb-3">+ {combo.subtitle}</p>
+              <p className="text-sm sm:text-base font-bold text-gray-900 mb-1">{b.title}</p>
+              <p className="text-xs sm:text-sm text-green-600 font-medium mb-3">+ {b.subtitle}</p>
               <div className="flex items-baseline gap-2 mb-3">
-                <span className="text-xl sm:text-2xl font-black text-rose-600">₹{combo.price}</span>
-                <span className="text-sm line-through text-gray-400">₹{combo.originalPrice}</span>
+                <span className="text-xl sm:text-2xl font-black text-rose-600">₹{b.price}</span>
+                {b.original_price > 0 && <span className="text-sm line-through text-gray-400">₹{b.original_price}</span>}
               </div>
-              <ul className="space-y-1.5 mb-4">
-                {combo.items.map((item, i) => (
-                  <li key={i} className="text-xs sm:text-sm flex items-center gap-2">
-                    <span className={item.includes("FREE") ? "text-green-500" : "text-gray-400"}>✓</span>
-                    <span className={item.includes("FREE") ? "text-green-600 font-medium" : "text-gray-600"}>{item}</span>
-                  </li>
-                ))}
-              </ul>
-              <Link href={`/products?combo=${combo.coupon}`} className="block w-full py-2 bg-rose-600 text-white font-bold text-xs sm:text-sm text-center hover:bg-rose-700 transition-colors">Shop This Combo</Link>
+              <Link href={`/products?combo=${b.coupon_code}`} className="block w-full py-2 bg-rose-600 text-white font-bold text-xs sm:text-sm text-center hover:bg-rose-700 transition-colors">Shop This Combo</Link>
             </div>
           ))}
         </div>
       </section>
+      )}
 
       {/* More Products */}
       <section className="bg-white border-t border-gray-100">

@@ -29,7 +29,9 @@ export default function AboutPage() {
         </p>
         <h2 className="text-xl font-bold text-gray-900 mt-8 mb-3">Contact</h2>
         <p className="text-gray-600">
-          📱 Instagram: <a href="https://www.instagram.com/itnahithajotha" className="text-rose-600 hover:underline">@itnahithajotha</a>
+          📱 Instagram: <a href="https://www.instagram.com/postta.in" className="text-rose-600 hover:underline">@postta.in</a>
+          <br />
+          💬 WhatsApp: <a href="https://wa.me/919335748094" className="text-rose-600 hover:underline">Chat on WhatsApp</a>
           <br />
           📞 Phone: +91 9335748094
         </p>

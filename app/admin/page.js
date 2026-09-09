@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 import ProductForm from "@/components/ProductForm";
+import BannerForm from "@/components/BannerForm";
 
 const statusColors = {
   pending: "bg-amber-100 text-amber-700",
@@ -34,6 +35,9 @@ export default function AdminPage() {
   const [editingProduct, setEditingProduct] = useState(null);
   const [productSearch, setProductSearch] = useState("");
   const [productCatFilter, setProductCatFilter] = useState("");
+  const [banners, setBanners] = useState([]);
+  const [showBannerForm, setShowBannerForm] = useState(false);
+  const [editingBanner, setEditingBanner] = useState(null);
 
   useEffect(() => {
     fetch("/api/admin/auth").then((r) => r.json()).then((data) => {
@@ -49,14 +53,17 @@ export default function AdminPage() {
   async function loadData() {
     setLoading(true);
     try {
-      const res = await fetch("/api/admin/data");
-      const data = await res.json();
-      if (data.success) {
-        setOrders(data.orders || []);
-        setCustomOrders(data.customOrders || []);
-        setTickets(data.tickets || []);
-        setProducts(data.products || []);
+      const [dataRes, bannersRes] = await Promise.all([
+        fetch("/api/admin/data").then((r) => r.json()),
+        fetch("/api/admin/banners").then((r) => r.json()).catch(() => ({ success: false, data: [] })),
+      ]);
+      if (dataRes.success) {
+        setOrders(dataRes.orders || []);
+        setCustomOrders(dataRes.customOrders || []);
+        setTickets(dataRes.tickets || []);
+        setProducts(dataRes.products || []);
       }
+      if (bannersRes.success) setBanners(bannersRes.data || []);
     } catch {}
     setLoading(false);
   }
@@ -116,6 +123,32 @@ export default function AdminPage() {
     loadData();
   }
 
+  async function saveBanner(bannerData) {
+    await fetch("/api/admin/banners/update", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(bannerData),
+    });
+    setShowBannerForm(false);
+    setEditingBanner(null);
+    loadData();
+  }
+
+  async function deleteBanner(id) {
+    if (!confirm("Delete this banner?")) return;
+    await fetch(`/api/admin/banners/update?id=${id}`, { method: "DELETE" });
+    loadData();
+  }
+
+  async function toggleBanner(id, currentActive) {
+    await fetch("/api/admin/banners/update", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, active: !currentActive }),
+    });
+    loadData();
+  }
+
   async function handleLogout() {
     await fetch("/api/admin/auth", { method: "DELETE" });
     router.push("/admin/login");
@@ -139,7 +172,7 @@ export default function AdminPage() {
 
   const allOrders = [...orders.map((o) => ({ ...o, _type: "regular" })), ...customOrders.map((o) => ({ ...o, _type: "custom" }))];
   allOrders.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-  const filtered = tab === "tickets" || tab === "products" ? [] : filteredOrders(allOrders);
+  const filtered = tab === "tickets" || tab === "products" || tab === "banners" ? [] : filteredOrders(allOrders);
   const openTickets = tickets.filter((t) => t.status === ticketTab);
   const flaggedCount = orders.filter((o) => o.flagged).length + customOrders.filter((o) => o.flagged).length;
 
@@ -208,7 +241,7 @@ export default function AdminPage() {
 
         {/* Tabs */}
         <div className="flex gap-1 mb-4 overflow-x-auto pb-1">
-          {["all", "pending", "confirmed", "shipped", "delivered", "cancelled", "archived", "tickets", "products"].map((t) => (
+          {["all", "pending", "confirmed", "shipped", "delivered", "cancelled", "archived", "tickets", "products", "banners"].map((t) => (
             <button key={t} onClick={() => setTab(t)}
               className={`px-3 py-1.5 text-xs font-bold uppercase whitespace-nowrap transition-colors ${
                 tab === t ? "bg-gray-900 text-white" : "bg-white text-gray-600 border border-gray-200 hover:bg-gray-50"
@@ -457,6 +490,71 @@ export default function AdminPage() {
             )}
           </div>
         )}
+
+        {/* Banners View */}
+        {tab === "banners" && (
+          <div>
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-xs text-gray-500">{banners.length} banners</p>
+              <button onClick={() => { setEditingBanner(null); setShowBannerForm(true); }}
+                className="px-4 py-2 bg-rose-600 text-white text-xs font-bold hover:bg-rose-700">+ Add Banner</button>
+            </div>
+            {banners.length === 0 ? (
+              <div className="bg-white border border-gray-200 p-8 text-center text-gray-400 text-sm">
+                No banners yet. Add your first offer banner!
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {banners.map((banner) => (
+                  <div key={banner.id} className="bg-white border border-gray-200 p-4">
+                    <div className="flex items-start justify-between gap-3 mb-3">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <p className="font-bold text-sm truncate">{banner.title}</p>
+                          <span className={`text-[9px] font-bold px-1.5 py-0.5 ${banner.active ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-500"}`}>
+                            {banner.active ? "ACTIVE" : "INACTIVE"}
+                          </span>
+                          <span className="text-[9px] bg-gray-100 text-gray-500 px-1.5 py-0.5">Order: {banner.sort_order}</span>
+                        </div>
+                        <p className="text-xs text-gray-500 truncate">{banner.subtitle}</p>
+                      </div>
+                      <div className="flex items-center gap-1.5 shrink-0">
+                        <button onClick={() => toggleBanner(banner.id, banner.active)}
+                          className={`px-2 py-1 text-[10px] font-bold ${banner.active ? "bg-amber-50 text-amber-700 hover:bg-amber-100" : "bg-green-50 text-green-700 hover:bg-green-100"}`}>
+                          {banner.active ? "Hide" : "Show"}
+                        </button>
+                        <button onClick={() => { setEditingBanner(banner); setShowBannerForm(true); }}
+                          className="px-2 py-1 bg-gray-100 text-[10px] font-bold hover:bg-gray-200">Edit</button>
+                        <button onClick={() => deleteBanner(banner.id)}
+                          className="px-2 py-1 bg-red-50 text-red-600 text-[10px] font-bold hover:bg-red-100">Del</button>
+                      </div>
+                    </div>
+                    {/* Preview */}
+                    <div className="overflow-hidden rounded">
+                      <div className="flex items-center gap-4 py-3 px-4" style={{ background: banner.bg_color }}>
+                        <div>
+                          <p className="font-bold text-sm whitespace-nowrap" style={{ color: banner.text_color }}>{banner.title}</p>
+                          <p className="text-xs whitespace-nowrap" style={{ color: banner.subtitle_color }}>{banner.subtitle}</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="font-black text-lg whitespace-nowrap" style={{ color: banner.text_color }}>₹{banner.price}</p>
+                          {banner.original_price > 0 && <p className="text-xs line-through whitespace-nowrap" style={{ color: banner.text_color, opacity: 0.5 }}>₹{banner.original_price}</p>}
+                        </div>
+                        {banner.badge_text && <span className="text-[10px] font-bold px-2 py-0.5 whitespace-nowrap" style={{ background: banner.badge_color, color: banner.text_color }}>{banner.badge_text}</span>}
+                      </div>
+                    </div>
+                    <div className="flex flex-wrap gap-3 mt-2 text-[10px] text-gray-400">
+                      <span>Coupon: {banner.coupon_code || "—"}</span>
+                      <span>Speed: {banner.speed}s</span>
+                      <span>BG: {banner.bg_color}</span>
+                      <span>Text: {banner.text_color}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Product Form Modal */}
@@ -465,6 +563,15 @@ export default function AdminPage() {
           product={editingProduct}
           onSave={saveProduct}
           onCancel={() => { setShowProductForm(false); setEditingProduct(null); }}
+        />
+      )}
+
+      {/* Banner Form Modal */}
+      {showBannerForm && (
+        <BannerForm
+          banner={editingBanner}
+          onSave={saveBanner}
+          onCancel={() => { setShowBannerForm(false); setEditingBanner(null); }}
         />
       )}
     </div>

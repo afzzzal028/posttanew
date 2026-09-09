@@ -77,6 +77,27 @@ CREATE TABLE IF NOT EXISTS tickets (
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
+-- Banners / Offers (marquee on homepage)
+CREATE TABLE IF NOT EXISTS banners (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  title TEXT NOT NULL,
+  subtitle TEXT NOT NULL DEFAULT '',
+  price INTEGER NOT NULL DEFAULT 0,
+  original_price INTEGER DEFAULT 0,
+  savings INTEGER DEFAULT 0,
+  coupon_code TEXT DEFAULT '',
+  bg_color TEXT NOT NULL DEFAULT '#e11d48',
+  text_color TEXT NOT NULL DEFAULT '#ffffff',
+  subtitle_color TEXT NOT NULL DEFAULT '#86efac',
+  badge_color TEXT NOT NULL DEFAULT 'rgba(255,255,255,0.2)',
+  badge_text TEXT NOT NULL DEFAULT '',
+  speed INTEGER NOT NULL DEFAULT 30,
+  active BOOLEAN DEFAULT TRUE,
+  sort_order INTEGER DEFAULT 0,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
 -- Admin users
 CREATE TABLE IF NOT EXISTS admin_users (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -86,6 +107,7 @@ CREATE TABLE IF NOT EXISTS admin_users (
 );
 
 -- Allow public read/write
+CREATE POLICY "Public read/write banners" ON banners FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "Public read/write products" ON products FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "Public read/write orders" ON orders FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "Public read/write custom_orders" ON custom_orders FOR ALL USING (true) WITH CHECK (true);
@@ -93,6 +115,8 @@ CREATE POLICY "Public read/write tickets" ON tickets FOR ALL USING (true) WITH C
 CREATE POLICY "Public read/write admin_users" ON admin_users FOR ALL USING (true) WITH CHECK (true);
 
 -- Indexes
+CREATE INDEX IF NOT EXISTS idx_banners_active ON banners(active);
+CREATE INDEX IF NOT EXISTS idx_banners_sort ON banners(sort_order);
 CREATE INDEX IF NOT EXISTS idx_products_category ON products(category);
 CREATE INDEX IF NOT EXISTS idx_products_in_stock ON products(in_stock);
 CREATE INDEX IF NOT EXISTS idx_products_featured ON products(featured);

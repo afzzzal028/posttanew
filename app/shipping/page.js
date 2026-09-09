@@ -32,7 +32,7 @@ export default function ShippingPage() {
         </div>
         <div>
           <h2 className="text-xl font-bold text-gray-900 mb-2">Contact</h2>
-          <p>For shipping queries, reach us on Instagram <a href="https://www.instagram.com/itnahithajotha" className="text-rose-600 hover:underline">@itnahithajotha</a> or call +91 9335748094.</p>
+          <p>For shipping queries, reach us on Instagram <a href="https://www.instagram.com/postta.in" className="text-rose-600 hover:underline">@postta.in</a>, WhatsApp <a href="https://wa.me/919335748094" className="text-rose-600 hover:underline">+91 9335748094</a>, or call +91 9335748094.</p>
         </div>
       </div>
     </div>

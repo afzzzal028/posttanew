@@ -10,8 +10,8 @@ export default function ContactPage() {
               <span className="text-2xl">📱</span>
               <div>
                 <p className="font-semibold text-gray-900">Instagram</p>
-                <a href="https://www.instagram.com/itnahithajotha" target="_blank" rel="noopener noreferrer" className="text-rose-600 hover:underline">
-                  @itnahithajotha
+                <a href="https://www.instagram.com/postta.in" target="_blank" rel="noopener noreferrer" className="text-rose-600 hover:underline">
+                  @postta.in
                 </a>
                 <p className="text-sm text-gray-500 mt-1">DM us for orders & queries</p>
               </div>
