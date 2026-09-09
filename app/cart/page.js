@@ -1,22 +1,31 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useCart } from "@/components/CartProvider";
 
 const sizeLabels = { A6: "A6 Card", A5: "A5 Poster", A4: "A4 Poster", A3: "A3 Poster" };
 
-const coupons = {
-  COMBO2A3: { discount: 139, requiredSize: "A3", minQty: 2, description: "Buy 2 A3 → Get 1 A4 + 2 A6 + 1 Mystery FREE" },
-  COMBO3A4: { discount: 187, requiredSize: "A4", minQty: 3, description: "Buy 3 A4 → Get 1 A5 + 3 A6 + 1 Mystery FREE" },
-  COMBO5A4: { discount: 316, requiredSize: "A4", minQty: 5, description: "Buy 5 A4 → Get 2 A5 + 5 A6 + 1 Mystery FREE" },
-  COMBO3A3: { discount: 274, requiredSize: "A3", minQty: 3, description: "Buy 3 A3 → Get 2 A4 + 5 A6 + 1 Mystery FREE" },
+const couponRules = {
+  COMBO2A3: { requiredSize: "A3", minQty: 2 },
+  COMBO3A4: { requiredSize: "A4", minQty: 3 },
+  COMBO5A4: { requiredSize: "A4", minQty: 5 },
+  COMBO3A3: { requiredSize: "A3", minQty: 3 },
 };
 
 export default function CartPage() {
   const { cart, removeFromCart, updateQuantity, totalPrice, totalItems, isLoaded } = useCart();
-  const [couponCode, setCouponCode] = useState("");
+  const [coupons, setCoupons] = useState([]);
   const [appliedCoupon, setAppliedCoupon] = useState(null);
   const [couponError, setCouponError] = useState("");
+
+  useEffect(() => {
+    fetch("/api/banners")
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.success) setCoupons(d.data || []);
+      })
+      .catch(() => {});
+  }, []);
 
   if (!isLoaded) {
     return (
@@ -44,17 +53,27 @@ export default function CartPage() {
     );
   }
 
-  function applyCoupon() {
-    const code = couponCode.toUpperCase().trim();
-    const coupon = coupons[code];
-    if (!coupon) { setCouponError("Invalid coupon code"); setAppliedCoupon(null); return; }
-    const sizeItems = cart.filter((item) => item.size === coupon.requiredSize);
-    const totalSizeQty = sizeItems.reduce((sum, item) => sum + item.quantity, 0);
-    if (totalSizeQty < coupon.minQty) { setCouponError(`Need ${coupon.minQty}× ${coupon.requiredSize}`); setAppliedCoupon(null); return; }
-    setAppliedCoupon({ ...coupon, code }); setCouponError("");
+  function selectCoupon(coupon) {
+    setCouponError("");
+    const rule = couponRules[coupon.coupon_code];
+    if (rule) {
+      const sizeItems = cart.filter((item) => item.size === rule.requiredSize);
+      const totalSizeQty = sizeItems.reduce((sum, item) => sum + item.quantity, 0);
+      if (totalSizeQty < rule.minQty) {
+        setCouponError(`Add ${rule.minQty}× ${rule.requiredSize} posters to use this coupon`);
+        setAppliedCoupon(null);
+        return;
+      }
+    }
+    setAppliedCoupon(coupon);
   }
 
-  const discount = appliedCoupon ? appliedCoupon.discount : 0;
+  function removeCoupon() {
+    setAppliedCoupon(null);
+    setCouponError("");
+  }
+
+  const discount = appliedCoupon ? appliedCoupon.savings : 0;
   const shipping = totalPrice >= 499 ? 0 : 49;
   const finalTotal = Math.max(0, totalPrice - discount + shipping);
 
@@ -103,45 +122,53 @@ export default function CartPage() {
           <div className="bg-white border border-gray-200 p-4 sticky top-20">
             <h2 className="font-black text-gray-900 mb-3 text-sm">Order Summary</h2>
 
-            {/* Coupon */}
-            <div className="mb-3">
-              <label className="text-[10px] font-bold text-gray-700 mb-1.5 block uppercase">Coupon Code</label>
-              {appliedCoupon ? (
-                <div className="bg-green-50 border border-green-200 p-2.5">
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="min-w-0">
-                      <p className="text-sm font-bold text-green-700 font-mono truncate">{appliedCoupon.code}</p>
-                      <p className="text-[10px] text-green-600">-₹{appliedCoupon.discount} off</p>
-                    </div>
-                    <button onClick={() => { setAppliedCoupon(null); setCouponCode(""); }} className="text-red-500 text-[10px] font-bold hover:underline shrink-0">Remove</button>
+            {/* Applied Coupon */}
+            {appliedCoupon && (
+              <div className="mb-3 bg-green-50 border border-green-200 p-2.5">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="min-w-0">
+                    <p className="text-[10px] font-bold text-green-700 uppercase">Coupon Applied</p>
+                    <p className="text-sm font-bold text-green-700 font-mono truncate">{appliedCoupon.coupon_code}</p>
+                    <p className="text-[10px] text-green-600">-₹{appliedCoupon.savings} off</p>
                   </div>
+                  <button onClick={removeCoupon} className="text-red-500 text-[10px] font-bold hover:underline shrink-0">Remove</button>
                 </div>
-              ) : (
-                <div>
-                  <div className="flex gap-1.5">
-                    <input type="text" value={couponCode} onChange={(e) => { setCouponCode(e.target.value.toUpperCase()); setCouponError(""); }}
-                      placeholder="Code" className="flex-1 min-w-0 px-2.5 py-2 border border-gray-200 text-xs font-mono focus:outline-none focus:ring-2 focus:ring-rose-500" />
-                    <button onClick={applyCoupon} className="px-3 py-2 bg-gray-900 text-white text-xs font-bold hover:bg-gray-800 shrink-0">Apply</button>
-                  </div>
-                  {couponError && <p className="text-[10px] text-red-500 mt-1">{couponError}</p>}
-                </div>
-              )}
-            </div>
+              </div>
+            )}
 
             {/* Available Coupons */}
-            {!appliedCoupon && (
-              <div className="mb-3 bg-rose-50 border border-rose-100 p-2.5">
-                <p className="text-[9px] font-bold text-rose-700 uppercase mb-1.5">Available Coupons</p>
-                <div className="space-y-1">
-                  {Object.entries(coupons).map(([code, coupon]) => (
-                    <button key={code} onClick={() => setCouponCode(code)}
-                      className="w-full text-left p-1.5 hover:bg-rose-100 transition-colors text-[10px] leading-tight">
-                      <span className="font-mono font-bold text-rose-600">{code}</span>
-                      <span className="text-gray-500 ml-1 hidden sm:inline">— {coupon.description}</span>
-                      <span className="text-gray-500 sm:hidden"> ({coupon.requiredSize} ×{coupon.minQty})</span>
-                    </button>
-                  ))}
+            {!appliedCoupon && coupons.length > 0 && (
+              <div className="mb-3">
+                <label className="text-[10px] font-bold text-gray-700 mb-1.5 block uppercase">Select a Coupon</label>
+                <div className="space-y-1.5">
+                  {coupons.map((c) => {
+                    const rule = couponRules[c.coupon_code];
+                    let eligible = true;
+                    let requirement = "";
+                    if (rule) {
+                      const sizeItems = cart.filter((item) => item.size === rule.requiredSize);
+                      const totalSizeQty = sizeItems.reduce((sum, item) => sum + item.quantity, 0);
+                      eligible = totalSizeQty >= rule.minQty;
+                      if (!eligible) requirement = `Need ${rule.minQty}× ${rule.requiredSize}`;
+                    }
+                    return (
+                      <button key={c.id} onClick={() => eligible && selectCoupon(c)} disabled={!eligible}
+                        className={`w-full text-left p-2.5 border transition-colors ${eligible ? "border-rose-200 hover:border-rose-400 hover:bg-rose-50 cursor-pointer" : "border-gray-100 bg-gray-50 opacity-60 cursor-not-allowed"}`}>
+                        <div className="flex items-center justify-between gap-2">
+                          <div className="min-w-0">
+                            <p className="text-[10px] font-bold font-mono text-gray-900">{c.coupon_code}</p>
+                            <p className="text-[9px] text-gray-500 truncate">{c.subtitle}</p>
+                          </div>
+                          <div className="text-right shrink-0">
+                            <p className="text-xs font-black text-green-600">-₹{c.savings}</p>
+                            {requirement && <p className="text-[8px] text-amber-600">{requirement}</p>}
+                          </div>
+                        </div>
+                      </button>
+                    );
+                  })}
                 </div>
+                {couponError && <p className="text-[10px] text-red-500 mt-1.5">{couponError}</p>}
               </div>
             )}
 

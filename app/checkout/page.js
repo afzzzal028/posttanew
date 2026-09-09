@@ -1,13 +1,13 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useCart } from "@/components/CartProvider";
 import Link from "next/link";
 
-const coupons = {
-  COMBO2A3: { discount: 139, description: "Buy 2 A3 → Get 1 A4 + 2 A6 + 1 Mystery FREE" },
-  COMBO3A4: { discount: 187, description: "Buy 3 A4 → Get 1 A5 + 3 A6 + 1 Mystery FREE" },
-  COMBO5A4: { discount: 316, description: "Buy 5 A4 → Get 2 A5 + 5 A6 + 1 Mystery FREE" },
-  COMBO3A3: { discount: 274, description: "Buy 3 A3 → Get 2 A4 + 5 A6 + 1 Mystery FREE" },
+const couponRules = {
+  COMBO2A3: { requiredSize: "A3", minQty: 2 },
+  COMBO3A4: { requiredSize: "A4", minQty: 3 },
+  COMBO5A4: { requiredSize: "A4", minQty: 5 },
+  COMBO3A3: { requiredSize: "A3", minQty: 3 },
 };
 
 export default function CheckoutPage() {
@@ -15,10 +15,17 @@ export default function CheckoutPage() {
   const [form, setForm] = useState({ name: "", phone: "", email: "", address: "", pincode: "", city: "", state: "" });
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [orderId, setOrderId] = useState("");
-  const [couponCode, setCouponCode] = useState("");
+  const [coupons, setCoupons] = useState([]);
   const [appliedCoupon, setAppliedCoupon] = useState(null);
   const [couponError, setCouponError] = useState("");
   const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/banners")
+      .then((r) => r.json())
+      .then((d) => { if (d.success) setCoupons(d.data || []); })
+      .catch(() => {});
+  }, []);
 
   if (!isLoaded) {
     return <div className="max-w-4xl mx-auto px-4 py-20 text-center text-gray-400">Loading...</div>;
@@ -33,16 +40,19 @@ export default function CheckoutPage() {
     );
   }
 
-  function applyCoupon() {
-    const code = couponCode.toUpperCase().trim();
-    const coupon = coupons[code];
-    if (!coupon) {
-      setCouponError("Invalid coupon code");
-      setAppliedCoupon(null);
-      return;
-    }
-    setAppliedCoupon({ ...coupon, code });
+  function selectCoupon(coupon) {
     setCouponError("");
+    const rule = couponRules[coupon.coupon_code];
+    if (rule) {
+      const sizeItems = cart.filter((item) => item.size === rule.requiredSize);
+      const totalSizeQty = sizeItems.reduce((sum, item) => sum + item.quantity, 0);
+      if (totalSizeQty < rule.minQty) {
+        setCouponError(`Add ${rule.minQty}× ${rule.requiredSize} posters to use this coupon`);
+        setAppliedCoupon(null);
+        return;
+      }
+    }
+    setAppliedCoupon(coupon);
   }
 
   function generateOrderId() {
@@ -51,7 +61,7 @@ export default function CheckoutPage() {
 
   async function saveOrder(paymentMethod) {
     const id = generateOrderId();
-    const discount = appliedCoupon ? appliedCoupon.discount : 0;
+    const discount = appliedCoupon ? appliedCoupon.savings : 0;
     const shipping = totalPrice >= 499 ? 0 : 49;
     const finalTotal = totalPrice - discount + shipping;
 
@@ -81,7 +91,7 @@ export default function CheckoutPage() {
           shipping,
           finalTotal,
           paymentMethod,
-          couponCode: appliedCoupon ? appliedCoupon.code : null,
+          couponCode: appliedCoupon ? appliedCoupon.coupon_code : null,
         }),
       });
     } catch (err) {
@@ -114,10 +124,10 @@ export default function CheckoutPage() {
     setOrderId(id);
 
     const items = cart.map((item) => `${item.name} (${item.size}) x${item.quantity} = ₹${item.price * item.quantity}`).join("\n");
-    const discount = appliedCoupon ? appliedCoupon.discount : 0;
+    const discount = appliedCoupon ? appliedCoupon.savings : 0;
     const shipping = totalPrice >= 499 ? 0 : 49;
     const finalTotal = totalPrice - discount + shipping;
-    const couponText = appliedCoupon ? `\nCoupon: ${appliedCoupon.code} (-₹${discount})` : "";
+    const couponText = appliedCoupon ? `\nCoupon: ${appliedCoupon.coupon_code} (-₹${discount})` : "";
     const message = `Hey! I want to place an order:\n\nOrder ID: ${id}\n\n${items}${couponText}\n\nTotal: ₹${finalTotal}\n\nName: ${form.name}\nPhone: ${form.phone}\nAddress: ${form.address}\nPincode: ${form.pincode}\nCity: ${form.city}\nState: ${form.state}`;
     window.open(`https://www.instagram.com/direct/t/?text=${encodeURIComponent(message)}`, "_blank");
 
@@ -145,7 +155,7 @@ export default function CheckoutPage() {
     );
   }
 
-  const discount = appliedCoupon ? appliedCoupon.discount : 0;
+  const discount = appliedCoupon ? appliedCoupon.savings : 0;
   const shipping = totalPrice >= 499 ? 0 : 49;
   const finalTotal = totalPrice - discount + shipping;
 
@@ -211,25 +221,55 @@ export default function CheckoutPage() {
               ))}
             </div>
 
-            {/* Coupon */}
-            <div className="border-t border-gray-200 pt-3 mb-3">
-              {appliedCoupon ? (
+            {/* Applied Coupon */}
+            {appliedCoupon && (
+              <div className="border-t border-gray-200 pt-3 mb-3">
                 <div className="flex items-center justify-between bg-green-50 border border-green-200 p-2">
                   <div>
-                    <p className="text-xs font-bold text-green-700">{appliedCoupon.code}</p>
-                    <p className="text-[10px] text-green-600">-₹{appliedCoupon.discount} discount</p>
+                    <p className="text-[10px] font-bold text-green-700 uppercase">Coupon Applied</p>
+                    <p className="text-xs font-bold text-green-700 font-mono">{appliedCoupon.coupon_code}</p>
+                    <p className="text-[10px] text-green-600">-₹{appliedCoupon.savings} discount</p>
                   </div>
                   <button onClick={() => setAppliedCoupon(null)} className="text-red-500 text-xs hover:underline">Remove</button>
                 </div>
-              ) : (
-                <div className="flex gap-2">
-                  <input type="text" value={couponCode} onChange={(e) => setCouponCode(e.target.value)}
-                    placeholder="Coupon code" className="flex-1 px-3 py-2 border border-gray-200 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-rose-500" />
-                  <button onClick={applyCoupon} className="px-3 py-2 bg-gray-900 text-white text-xs sm:text-sm font-bold hover:bg-gray-800">Apply</button>
+              </div>
+            )}
+
+            {/* Available Coupons */}
+            {!appliedCoupon && coupons.length > 0 && (
+              <div className="border-t border-gray-200 pt-3 mb-3">
+                <label className="text-[10px] font-bold text-gray-700 mb-1.5 block uppercase">Select a Coupon</label>
+                <div className="space-y-1.5">
+                  {coupons.map((c) => {
+                    const rule = couponRules[c.coupon_code];
+                    let eligible = true;
+                    let requirement = "";
+                    if (rule) {
+                      const sizeItems = cart.filter((item) => item.size === rule.requiredSize);
+                      const totalSizeQty = sizeItems.reduce((sum, item) => sum + item.quantity, 0);
+                      eligible = totalSizeQty >= rule.minQty;
+                      if (!eligible) requirement = `Need ${rule.minQty}× ${rule.requiredSize}`;
+                    }
+                    return (
+                      <button key={c.id} onClick={() => eligible && selectCoupon(c)} disabled={!eligible}
+                        className={`w-full text-left p-2 border transition-colors ${eligible ? "border-rose-200 hover:border-rose-400 hover:bg-rose-50 cursor-pointer" : "border-gray-100 bg-gray-50 opacity-60 cursor-not-allowed"}`}>
+                        <div className="flex items-center justify-between gap-2">
+                          <div className="min-w-0">
+                            <p className="text-[10px] font-bold font-mono text-gray-900">{c.coupon_code}</p>
+                            <p className="text-[9px] text-gray-500 truncate">{c.subtitle}</p>
+                          </div>
+                          <div className="text-right shrink-0">
+                            <p className="text-xs font-black text-green-600">-₹{c.savings}</p>
+                            {requirement && <p className="text-[8px] text-amber-600">{requirement}</p>}
+                          </div>
+                        </div>
+                      </button>
+                    );
+                  })}
                 </div>
-              )}
-              {couponError && <p className="text-xs text-red-500 mt-1">{couponError}</p>}
-            </div>
+                {couponError && <p className="text-[10px] text-red-500 mt-1">{couponError}</p>}
+              </div>
+            )}
 
             <div className="space-y-2 text-xs sm:text-sm border-t border-gray-200 pt-3">
               <div className="flex justify-between">
