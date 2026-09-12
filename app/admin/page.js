@@ -443,7 +443,7 @@ export default function AdminPage() {
               <select value={productCatFilter} onChange={(e) => setProductCatFilter(e.target.value)}
                 className="px-3 py-2 border border-gray-200 text-xs focus:outline-none focus:ring-2 focus:ring-rose-500">
                 <option value="">All Categories</option>
-                {["cars", "anime", "gaming", "sports", "marvel", "dc", "movies", "music", "motivational", "devotional"].map((c) => (
+                {["cars", "anime", "gaming", "sports", "marvel", "dc", "movies", "music", "motivational", "islamic"].map((c) => (
                   <option key={c} value={c}>{c}</option>
                 ))}
               </select>

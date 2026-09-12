@@ -8,7 +8,7 @@ export const categories = [
   { id: "movies", name: "Movies", icon: "🎬", description: "Fight Club, Interstellar & More" },
   { id: "music", name: "Music", icon: "🎵", description: "Hip-Hop, Vinyl, Aesthetic & More" },
   { id: "motivational", name: "Motivational", icon: "💪", description: "Hustle, Discipline, Grind & More" },
-  { id: "devotional", name: "Devotional", icon: "🕉️", description: "Bhagavad Gita, Hanuman & More" },
+  { id: "islamic", name: "Islamic", icon: "🕌", description: "Calligraphy, Quran Verses, Masjid & More" },
 ];
 
 export const sizes = {
@@ -115,13 +115,15 @@ export const products = [
   { id: "gym-bear", name: "Gym Motivation Bear", category: "motivational", subcategory: "gym", tags: ["gym", "bear", "motivation"], colors: ["black", "red"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
   { id: "mindset-shift", name: "Mindset Is Everything", category: "motivational", subcategory: "mindset", tags: ["mindset", "shift", "growth"], colors: ["black", "gold"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
 
-  // DEVOTIONAL
-  { id: "krishna-flute", name: "Krishna Flute", category: "devotional", subcategory: "hindu", tags: ["krishna", "flute", "divine"], colors: ["blue", "yellow"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
-  { id: "hanuman-chalisa", name: "Hanuman Chalisa", category: "devotional", subcategory: "hindu", tags: ["hanuman", "chalisa", "strength"], colors: ["orange", "red"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
-  { id: "ganesha-blessings", name: "Ganesha Blessings", category: "devotional", subcategory: "hindu", tags: ["ganesha", "blessings", "remover"], colors: ["red", "gold"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
-  { id: "bhagavad-gita", name: "Bhagavad Gita Quote", category: "devotional", subcategory: "hindu", tags: ["gita", "krishna", "wisdom"], colors: ["orange", "white"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
-  { id: "shiva-meditation", name: "Shiva Meditation", category: "devotional", subcategory: "hindu", tags: ["shiva", "meditation", "peace"], colors: ["blue", "white"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
-  { id: "rama-bow", name: "Lord Rama Bow Arrow", category: "devotional", subcategory: "hindu", tags: ["rama", "arrow", "dharma"], colors: ["gold", "green"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  // ISLAMIC
+  { id: "allah-calligraphy", name: "Allah Calligraphy", category: "islamic", subcategory: "calligraphy", tags: ["allah", "calligraphy", "islamic"], colors: ["gold", "black"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "bismillah-art", name: "Bismillah Art", category: "islamic", subcategory: "calligraphy", tags: ["bismillah", "calligraphy", "art"], colors: ["green", "white"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "masjid-nabawi", name: "Masjid Nabawi", category: "islamic", subcategory: "masjid", tags: ["masjid", "nabawi", "medina"], colors: ["green", "gold"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "masjid-haram", name: "Masjid Al Haram", category: "islamic", subcategory: "masjid", tags: ["masjid", "haram", "makkah"], colors: ["white", "gold"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "quran-verse-art", name: "Quran Verse Art", category: "islamic", subcategory: "verses", tags: ["quran", "verse", "ayat"], colors: ["blue", "white"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "muhammad-pbuh", name: "Muhammad ﷺ Calligraphy", category: "islamic", subcategory: "calligraphy", tags: ["muhammad", "saw", "calligraphy"], colors: ["green", "gold"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "surah-ayatul-kursi", name: "Ayatul Kursi", category: "islamic", subcategory: "verses", tags: ["ayatul-kursi", "quran", "throne"], colors: ["black", "gold"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
+  { id: "darul-salam", name: "Dar Al Salam", category: "islamic", subcategory: "calligraphy", tags: ["dar", "salam", "peace"], colors: ["green", "white"], prices: { A6: 29, A5: 79, A4: 129, A3: 179 } },
 ];
 
 export const bundleOffers = [

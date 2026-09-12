@@ -1,7 +1,7 @@
 "use client";
-import { useState } from "react";
+import { useState, useRef } from "react";
 
-const categories = ["cars", "anime", "gaming", "sports", "marvel", "dc", "movies", "music", "motivational", "devotional"];
+const categories = ["cars", "anime", "gaming", "sports", "marvel", "dc", "movies", "music", "motivational", "islamic"];
 
 const defaultPrices = { A6: 29, A5: 79, A4: 129, A3: 179 };
 
@@ -20,13 +20,14 @@ export default function ProductForm({ product, onSave, onCancel }) {
     in_stock: product?.in_stock !== false,
     featured: product?.featured || false,
   });
-  const [uploading, setUploading] = useState(false);
+  const [uploading, setUploading] = useState(null);
   const [saving, setSaving] = useState(false);
+  const [dragOver, setDragOver] = useState(null);
+  const inputRefs = useRef({});
 
-  async function handleImageUpload(e, index) {
-    const file = e.target.files[0];
+  async function uploadFile(file, index) {
     if (!file || !form.id) return;
-    setUploading(true);
+    setUploading(index);
     const fd = new FormData();
     fd.append("file", file);
     fd.append("productId", form.id);
@@ -40,13 +41,27 @@ export default function ProductForm({ product, onSave, onCancel }) {
         setForm({ ...form, image_urls: newUrls, image_url: index === 0 ? data.url : form.image_url });
       }
     } catch {}
-    setUploading(false);
+    setUploading(null);
+    if (inputRefs.current[index]) inputRefs.current[index].value = "";
+  }
+
+  function handleFileSelect(e, index) {
+    const file = e.target.files?.[0];
+    if (file) uploadFile(file, index);
+  }
+
+  function handleDrop(e, index) {
+    e.preventDefault();
+    setDragOver(null);
+    const file = e.dataTransfer.files?.[0];
+    if (file && file.type.startsWith("image/")) uploadFile(file, index);
   }
 
   function removeImage(index) {
     const newUrls = [...form.image_urls];
     newUrls.splice(index, 1);
     setForm({ ...form, image_urls: newUrls, image_url: index === 0 ? (newUrls[0] || "") : form.image_url });
+    if (inputRefs.current[index]) inputRefs.current[index].value = "";
   }
 
   async function handleSave() {
@@ -73,7 +88,7 @@ export default function ProductForm({ product, onSave, onCancel }) {
               <label className="block text-[10px] font-bold text-gray-700 uppercase mb-1">Product ID *</label>
               <input type="text" value={form.id} onChange={(e) => setForm({ ...form, id: e.target.value })} disabled={!!product}
                 className="w-full px-2 py-1.5 border border-gray-200 text-xs focus:outline-none focus:ring-1 focus:ring-rose-500 disabled:bg-gray-50"
-                placeholder="e.g. porsche-911" />
+                placeholder="e.g. allah-calligraphy" />
             </div>
             <div>
               <label className="block text-[10px] font-bold text-gray-700 uppercase mb-1">Name *</label>
@@ -94,7 +109,7 @@ export default function ProductForm({ product, onSave, onCancel }) {
               <label className="block text-[10px] font-bold text-gray-700 uppercase mb-1">Subcategory</label>
               <input type="text" value={form.subcategory} onChange={(e) => setForm({ ...form, subcategory: e.target.value })}
                 className="w-full px-2 py-1.5 border border-gray-200 text-xs focus:outline-none focus:ring-1 focus:ring-rose-500"
-                placeholder="e.g. concept-cars" />
+                placeholder="e.g. calligraphy" />
             </div>
           </div>
           <div className="grid grid-cols-2 gap-3">
@@ -102,13 +117,13 @@ export default function ProductForm({ product, onSave, onCancel }) {
               <label className="block text-[10px] font-bold text-gray-700 uppercase mb-1">Tags (comma sep)</label>
               <input type="text" value={form.tags} onChange={(e) => setForm({ ...form, tags: e.target.value })}
                 className="w-full px-2 py-1.5 border border-gray-200 text-xs focus:outline-none focus:ring-1 focus:ring-rose-500"
-                placeholder="porsche, racing, sports" />
+                placeholder="allah, calligraphy, islamic" />
             </div>
             <div>
               <label className="block text-[10px] font-bold text-gray-700 uppercase mb-1">Colors (comma sep)</label>
               <input type="text" value={form.colors} onChange={(e) => setForm({ ...form, colors: e.target.value })}
                 className="w-full px-2 py-1.5 border border-gray-200 text-xs focus:outline-none focus:ring-1 focus:ring-rose-500"
-                placeholder="red, black" />
+                placeholder="gold, black" />
             </div>
           </div>
           <div className="grid grid-cols-4 gap-2">
@@ -121,29 +136,51 @@ export default function ProductForm({ product, onSave, onCancel }) {
             ))}
           </div>
 
-          {/* Multiple Images */}
+          {/* Images - Easy Upload */}
           <div>
-            <label className="block text-[10px] font-bold text-gray-700 uppercase mb-1">Images (up to 5)</label>
+            <label className="block text-[10px] font-bold text-gray-700 uppercase mb-1.5">Product Photos (tap to upload, drag & drop)</label>
             <div className="grid grid-cols-5 gap-2">
               {[0, 1, 2, 3, 4].map((i) => (
-                <div key={i} className="relative">
+                <div key={i}
+                  onDragOver={(e) => { e.preventDefault(); setDragOver(i); }}
+                  onDragLeave={() => setDragOver(null)}
+                  onDrop={(e) => handleDrop(e, i)}>
                   {form.image_urls[i] ? (
-                    <div className="aspect-square border border-gray-200 overflow-hidden bg-gray-50">
+                    <div className={`relative aspect-square border overflow-hidden bg-gray-50 ${dragOver === i ? "border-rose-400 bg-rose-50" : "border-gray-200"}`}>
                       <img src={form.image_urls[i]} alt="" className="w-full h-full object-cover" />
-                      <button onClick={() => removeImage(i)}
-                        className="absolute top-0 right-0 w-4 h-4 bg-red-500 text-white text-[8px] flex items-center justify-center">✕</button>
+                      {uploading === i && (
+                        <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                          <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        </div>
+                      )}
+                      <div className="absolute top-0 right-0 flex">
+                        <label className="w-5 h-5 bg-blue-500 text-white text-[8px] flex items-center justify-center cursor-pointer hover:bg-blue-600">
+                          <input type="file" accept="image/*" ref={(el) => { inputRefs.current[i] = el; }}
+                            onChange={(e) => handleFileSelect(e, i)} className="hidden" />
+                          ↻
+                        </label>
+                        <button onClick={() => removeImage(i)}
+                          className="w-5 h-5 bg-red-500 text-white text-[8px] flex items-center justify-center hover:bg-red-600">✕</button>
+                      </div>
                     </div>
                   ) : (
-                    <label className="aspect-square border border-dashed border-gray-300 flex flex-col items-center justify-center cursor-pointer hover:border-rose-400 bg-gray-50">
-                      <span className="text-lg text-gray-300">+</span>
-                      <span className="text-[8px] text-gray-400">{i === 0 ? "Main" : `#${i + 1}`}</span>
-                      <input type="file" accept="image/*" onChange={(e) => handleImageUpload(e, i)} className="hidden" />
+                    <label className={`aspect-square border-2 border-dashed flex flex-col items-center justify-center cursor-pointer transition-colors ${dragOver === i ? "border-rose-400 bg-rose-50" : "border-gray-300 hover:border-rose-400 bg-gray-50"}`}>
+                      {uploading === i ? (
+                        <div className="w-5 h-5 border-2 border-rose-400 border-t-transparent rounded-full animate-spin"></div>
+                      ) : (
+                        <>
+                          <span className="text-lg text-gray-300">+</span>
+                          <span className="text-[7px] text-gray-400">{i === 0 ? "Main" : `#${i + 1}`}</span>
+                        </>
+                      )}
+                      <input type="file" accept="image/*" ref={(el) => { inputRefs.current[i] = el; }}
+                        onChange={(e) => handleFileSelect(e, i)} className="hidden" />
                     </label>
                   )}
                 </div>
               ))}
             </div>
-            {uploading && <p className="text-[10px] text-gray-500 mt-1">Uploading...</p>}
+            {uploading !== null && <p className="text-[10px] text-gray-500 mt-1">Uploading...</p>}
           </div>
 
           <div>

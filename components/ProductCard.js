@@ -13,7 +13,7 @@ const categoryIcons = {
   movies: "🎬",
   music: "🎵",
   motivational: "💪",
-  devotional: "🕉️",
+  islamic: "🕌",
 };
 
 export default function ProductCard({ product }) {

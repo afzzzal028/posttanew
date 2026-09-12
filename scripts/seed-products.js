@@ -94,12 +94,14 @@ const products = [
   { id: "wolf-wall-street", name: "Wolf of Wall Street", category: "motivational", subcategory: "hustle", tags: ["wolf", "wall-street", "money"], colors: ["gold", "black"] },
   { id: "gym-bear", name: "Gym Motivation Bear", category: "motivational", subcategory: "gym", tags: ["gym", "bear", "motivation"], colors: ["black", "red"] },
   { id: "mindset-shift", name: "Mindset Is Everything", category: "motivational", subcategory: "mindset", tags: ["mindset", "shift", "growth"], colors: ["black", "gold"] },
-  { id: "krishna-flute", name: "Krishna Flute", category: "devotional", subcategory: "hindu", tags: ["krishna", "flute", "divine"], colors: ["blue", "yellow"] },
-  { id: "hanuman-chalisa", name: "Hanuman Chalisa", category: "devotional", subcategory: "hindu", tags: ["hanuman", "chalisa", "strength"], colors: ["orange", "red"] },
-  { id: "ganesha-blessings", name: "Ganesha Blessings", category: "devotional", subcategory: "hindu", tags: ["ganesha", "blessings", "remover"], colors: ["red", "gold"] },
-  { id: "bhagavad-gita", name: "Bhagavad Gita Quote", category: "devotional", subcategory: "hindu", tags: ["gita", "krishna", "wisdom"], colors: ["orange", "white"] },
-  { id: "shiva-meditation", name: "Shiva Meditation", category: "devotional", subcategory: "hindu", tags: ["shiva", "meditation", "peace"], colors: ["blue", "white"] },
-  { id: "rama-bow", name: "Lord Rama Bow Arrow", category: "devotional", subcategory: "hindu", tags: ["rama", "arrow", "dharma"], colors: ["gold", "green"] },
+  { id: "allah-calligraphy", name: "Allah Calligraphy", category: "islamic", subcategory: "calligraphy", tags: ["allah", "calligraphy", "islamic"], colors: ["gold", "black"] },
+  { id: "bismillah-art", name: "Bismillah Art", category: "islamic", subcategory: "calligraphy", tags: ["bismillah", "calligraphy", "art"], colors: ["green", "white"] },
+  { id: "masjid-nabawi", name: "Masjid Nabawi", category: "islamic", subcategory: "masjid", tags: ["masjid", "nabawi", "medina"], colors: ["green", "gold"] },
+  { id: "masjid-haram", name: "Masjid Al Haram", category: "islamic", subcategory: "masjid", tags: ["masjid", "haram", "makkah"], colors: ["white", "gold"] },
+  { id: "quran-verse-art", name: "Quran Verse Art", category: "islamic", subcategory: "verses", tags: ["quran", "verse", "ayat"], colors: ["blue", "white"] },
+  { id: "muhammad-pbuh", name: "Muhammad ﷺ Calligraphy", category: "islamic", subcategory: "calligraphy", tags: ["muhammad", "saw", "calligraphy"], colors: ["green", "gold"] },
+  { id: "surah-ayatul-kursi", name: "Ayatul Kursi", category: "islamic", subcategory: "verses", tags: ["ayatul-kursi", "quran", "throne"], colors: ["black", "gold"] },
+  { id: "darul-salam", name: "Dar Al Salam", category: "islamic", subcategory: "calligraphy", tags: ["dar", "salam", "peace"], colors: ["green", "white"] },
 ];
 
 const defaultPrices = { A6: 29, A5: 79, A4: 129, A3: 179 };
