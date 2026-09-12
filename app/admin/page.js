@@ -38,6 +38,12 @@ export default function AdminPage() {
   const [banners, setBanners] = useState([]);
   const [showBannerForm, setShowBannerForm] = useState(false);
   const [editingBanner, setEditingBanner] = useState(null);
+  const [showBulkUpload, setShowBulkUpload] = useState(false);
+  const [bulkFiles, setBulkFiles] = useState([]);
+  const [bulkCategory, setBulkCategory] = useState("islamic");
+  const [bulkSubcategory, setBulkSubcategory] = useState("");
+  const [bulkUploading, setBulkUploading] = useState(false);
+  const [bulkResults, setBulkResults] = useState(null);
 
   useEffect(() => {
     fetch("/api/admin/auth").then((r) => r.json()).then((data) => {
@@ -449,6 +455,8 @@ export default function AdminPage() {
               </select>
               <button onClick={() => { setEditingProduct(null); setShowProductForm(true); }}
                 className="px-4 py-2 bg-rose-600 text-white text-xs font-bold hover:bg-rose-700 whitespace-nowrap">+ Add Product</button>
+              <button onClick={() => { setShowBulkUpload(true); setBulkResults(null); setBulkFiles([]); }}
+                className="px-4 py-2 bg-gray-900 text-white text-xs font-bold hover:bg-gray-800 whitespace-nowrap">📦 Bulk Upload</button>
             </div>
             <p className="text-xs text-gray-500 mb-3">{filteredProducts.length} products</p>
             {filteredProducts.length === 0 ? (
@@ -574,6 +582,115 @@ export default function AdminPage() {
           onSave={saveBanner}
           onCancel={() => { setShowBannerForm(false); setEditingBanner(null); }}
         />
+      )}
+
+      {/* Bulk Upload Modal */}
+      {showBulkUpload && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white border border-gray-200 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between p-4 border-b border-gray-200">
+              <h3 className="font-bold text-gray-900">📦 Bulk Upload Catalog</h3>
+              <button onClick={() => setShowBulkUpload(false)} className="text-gray-400 hover:text-gray-600 text-lg">✕</button>
+            </div>
+            <div className="p-4 space-y-4">
+              <p className="text-xs text-gray-500">Select multiple images — each image becomes a product. Name your files like <code className="bg-gray-100 px-1">allah-calligraphy.jpg</code> and the product name is auto-generated.</p>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-[10px] font-bold text-gray-700 uppercase mb-1">Category *</label>
+                  <select value={bulkCategory} onChange={(e) => setBulkCategory(e.target.value)}
+                    className="w-full px-2 py-1.5 border border-gray-200 text-xs focus:outline-none focus:ring-1 focus:ring-rose-500">
+                    {["cars", "anime", "gaming", "sports", "marvel", "dc", "movies", "music", "motivational", "islamic"].map((c) => (
+                      <option key={c} value={c}>{c}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-[10px] font-bold text-gray-700 uppercase mb-1">Subcategory</label>
+                  <input type="text" value={bulkSubcategory} onChange={(e) => setBulkSubcategory(e.target.value)}
+                    className="w-full px-2 py-1.5 border border-gray-200 text-xs focus:outline-none focus:ring-1 focus:ring-rose-500"
+                    placeholder="e.g. calligraphy" />
+                </div>
+              </div>
+
+              {/* Drop Zone */}
+              <label className="block border-2 border-dashed border-gray-300 p-8 text-center cursor-pointer hover:border-rose-400 hover:bg-rose-50 transition-colors">
+                <input type="file" accept="image/*" multiple className="hidden"
+                  onChange={(e) => setBulkFiles(Array.from(e.target.files || []))} />
+                {bulkFiles.length > 0 ? (
+                  <div>
+                    <p className="text-sm font-bold text-gray-900">{bulkFiles.length} images selected</p>
+                    <p className="text-[10px] text-gray-500 mt-1">Click to change selection</p>
+                  </div>
+                ) : (
+                  <div>
+                    <span className="text-3xl">📸</span>
+                    <p className="text-sm font-bold text-gray-900 mt-2">Click or drag images here</p>
+                    <p className="text-[10px] text-gray-500 mt-1">Select all poster images at once</p>
+                  </div>
+                )}
+              </label>
+
+              {/* Preview */}
+              {bulkFiles.length > 0 && !bulkResults && (
+                <div>
+                  <p className="text-[10px] font-bold text-gray-700 uppercase mb-1.5">Preview ({bulkFiles.length} products)</p>
+                  <div className="grid grid-cols-4 gap-2 max-h-48 overflow-y-auto">
+                    {bulkFiles.map((file, i) => (
+                      <div key={i} className="aspect-square bg-gray-50 border border-gray-200 flex items-center justify-center overflow-hidden">
+                        <img src={URL.createObjectURL(file)} alt="" className="w-full h-full object-cover" />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Results */}
+              {bulkResults && (
+                <div>
+                  <p className="text-xs font-bold text-gray-900 mb-2">
+                    Uploaded {bulkResults.uploaded}/{bulkResults.total} products
+                  </p>
+                  <div className="max-h-48 overflow-y-auto space-y-1">
+                    {bulkResults.results.map((r, i) => (
+                      <div key={i} className={`text-[10px] p-1.5 ${r.error ? "bg-red-50 text-red-600" : "bg-green-50 text-green-600"}`}>
+                        {r.name} — {r.error || `✓ ${r.id}`}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className="flex gap-2">
+                <button onClick={() => setShowBulkUpload(false)} className="flex-1 py-2 border border-gray-200 text-xs font-bold hover:bg-gray-50">Close</button>
+                {!bulkResults && (
+                  <button onClick={async () => {
+                    if (bulkFiles.length === 0) return;
+                    setBulkUploading(true);
+                    const fd = new FormData();
+                    bulkFiles.forEach((f) => fd.append("files", f));
+                    fd.append("category", bulkCategory);
+                    fd.append("subcategory", bulkSubcategory);
+                    try {
+                      const res = await fetch("/api/products/bulk-upload", { method: "POST", body: fd });
+                      const data = await res.json();
+                      setBulkResults(data);
+                      loadData();
+                    } catch {}
+                    setBulkUploading(false);
+                  }} disabled={bulkUploading || bulkFiles.length === 0}
+                    className="flex-1 py-2 bg-rose-600 text-white text-xs font-bold hover:bg-rose-700 disabled:opacity-50">
+                    {bulkUploading ? "Uploading..." : `Upload ${bulkFiles.length} Products`}
+                  </button>
+                )}
+                {bulkResults && (
+                  <button onClick={() => { setBulkFiles([]); setBulkResults(null); }}
+                    className="flex-1 py-2 bg-gray-900 text-white text-xs font-bold hover:bg-gray-800">Upload More</button>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
