@@ -45,6 +45,10 @@ export default function AdminPage() {
   const [bulkUploading, setBulkUploading] = useState(false);
   const [bulkProgress, setBulkProgress] = useState({ current: 0, total: 0 });
   const [bulkDragOver, setBulkDragOver] = useState(false);
+  const [selectedProducts, setSelectedProducts] = useState([]);
+  const [bulkAction, setBulkAction] = useState("");
+  const [bulkActionCat, setBulkActionCat] = useState("islamic");
+  const [bulkActionRunning, setBulkActionRunning] = useState(false);
 
   function addBulkFiles(fileList) {
     const newItems = Array.from(fileList)
@@ -111,6 +115,67 @@ export default function AdminPage() {
       }
     }
     setBulkUploading(false);
+    loadData();
+  }
+
+  function toggleProductSelect(id) {
+    setSelectedProducts((prev) => prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]);
+  }
+
+  function toggleSelectAll() {
+    if (selectedProducts.length === filteredProducts.length) {
+      setSelectedProducts([]);
+    } else {
+      setSelectedProducts(filteredProducts.map((p) => p.id));
+    }
+  }
+
+  async function runBulkAction() {
+    if (!bulkAction || selectedProducts.length === 0) return;
+    if (bulkAction === "delete" && !confirm(`Delete ${selectedProducts.length} products?`)) return;
+    setBulkActionRunning(true);
+
+    for (const id of selectedProducts) {
+      try {
+        if (bulkAction === "delete") {
+          await fetch(`/api/products?id=${id}`, { method: "DELETE" });
+        } else if (bulkAction === "feature") {
+          await fetch("/api/products", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id, featured: true }),
+          });
+        } else if (bulkAction === "unfeature") {
+          await fetch("/api/products", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id, featured: false }),
+          });
+        } else if (bulkAction === "instock") {
+          await fetch("/api/products", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id, in_stock: true }),
+          });
+        } else if (bulkAction === "outofstock") {
+          await fetch("/api/products", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id, in_stock: false }),
+          });
+        } else if (bulkAction === "movecategory") {
+          await fetch("/api/products", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id, category: bulkActionCat }),
+          });
+        }
+      } catch {}
+    }
+
+    setSelectedProducts([]);
+    setBulkAction("");
+    setBulkActionRunning(false);
     loadData();
   }
 
@@ -527,20 +592,62 @@ export default function AdminPage() {
               <button onClick={() => { setShowBulkUpload(true); setBulkItems([]); }}
                 className="px-4 py-2 bg-gray-900 text-white text-xs font-bold hover:bg-gray-800 whitespace-nowrap">Bulk Upload</button>
             </div>
-            <p className="text-xs text-gray-500 mb-3">{filteredProducts.length} products</p>
+
+            {/* Bulk Action Bar */}
+            {selectedProducts.length > 0 && (
+              <div className="bg-gray-900 text-white p-3 mb-3 flex flex-wrap items-center gap-2">
+                <span className="text-xs font-bold">{selectedProducts.length} selected</span>
+                <select value={bulkAction} onChange={(e) => setBulkAction(e.target.value)}
+                  className="px-2 py-1 bg-gray-800 border border-gray-700 text-xs text-white focus:outline-none">
+                  <option value="">Choose action...</option>
+                  <option value="delete">Delete</option>
+                  <option value="feature">Mark Featured</option>
+                  <option value="unfeature">Remove Featured</option>
+                  <option value="instock">Set In Stock</option>
+                  <option value="outofstock">Set Out of Stock</option>
+                  <option value="movecategory">Move to Category</option>
+                </select>
+                {bulkAction === "movecategory" && (
+                  <select value={bulkActionCat} onChange={(e) => setBulkActionCat(e.target.value)}
+                    className="px-2 py-1 bg-gray-800 border border-gray-700 text-xs text-white focus:outline-none">
+                    {["cars", "anime", "gaming", "sports", "marvel", "dc", "movies", "music", "motivational", "islamic"].map((c) => (
+                      <option key={c} value={c}>{c}</option>
+                    ))}
+                  </select>
+                )}
+                <button onClick={runBulkAction} disabled={!bulkAction || bulkActionRunning}
+                  className="px-3 py-1 bg-rose-600 text-white text-xs font-bold hover:bg-rose-700 disabled:opacity-50">
+                  {bulkActionRunning ? "Working..." : "Apply"}
+                </button>
+                <button onClick={() => setSelectedProducts([])} className="px-3 py-1 text-xs text-gray-300 hover:text-white">Clear</button>
+              </div>
+            )}
+
+            <div className="flex items-center gap-2 mb-3">
+              <label className="flex items-center gap-1.5 text-xs text-gray-500 cursor-pointer">
+                <input type="checkbox" checked={selectedProducts.length === filteredProducts.length && filteredProducts.length > 0}
+                  onChange={toggleSelectAll} className="accent-rose-600" />
+                Select all ({filteredProducts.length})
+              </label>
+            </div>
+
             {filteredProducts.length === 0 ? (
               <div className="bg-white border border-gray-200 p-8 text-center text-gray-400 text-sm">No products found</div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 {filteredProducts.map((product) => (
-                  <div key={product.id} className="bg-white border border-gray-200 p-3">
+                  <div key={product.id} className={`bg-white border p-3 ${selectedProducts.includes(product.id) ? "border-rose-400 bg-rose-50" : "border-gray-200"}`}>
                     <div className="flex gap-3">
-                      <div className="w-16 h-16 bg-gray-100 flex items-center justify-center shrink-0 overflow-hidden">
-                        {product.image_url ? (
-                          <img src={product.image_url} alt={product.name} className="w-full h-full object-cover" />
-                        ) : (
-                          <span className="text-2xl">🖼️</span>
-                        )}
+                      <div className="flex flex-col items-center gap-1">
+                        <input type="checkbox" checked={selectedProducts.includes(product.id)}
+                          onChange={() => toggleProductSelect(product.id)} className="accent-rose-600" />
+                        <div className="w-16 h-16 bg-gray-100 flex items-center justify-center shrink-0 overflow-hidden">
+                          {product.image_url ? (
+                            <img src={product.image_url} alt={product.name} className="w-full h-full object-cover" />
+                          ) : (
+                            <span className="text-2xl">🖼️</span>
+                          )}
+                        </div>
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="font-bold text-xs truncate">{product.name}</p>

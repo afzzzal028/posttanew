@@ -41,25 +41,30 @@ export async function POST(req) {
     const body = await req.json();
     const { id, name, category, subcategory, tags, colors, prices, image_url, image_urls, badge, in_stock, featured } = body;
 
-    if (!id || !name || !category) {
+    if (!id) {
+      return NextResponse.json({ success: false, error: "Missing product id" }, { status: 400 });
+    }
+
+    const isPartialUpdate = !name && !category;
+    const updateData = { id, updated_at: new Date().toISOString() };
+
+    if (name) updateData.name = name;
+    if (category) updateData.category = category;
+    if (subcategory !== undefined) updateData.subcategory = subcategory || null;
+    if (tags) updateData.tags = tags;
+    if (colors) updateData.colors = colors;
+    if (prices) updateData.prices = prices;
+    if (image_url !== undefined) updateData.image_url = image_url || null;
+    if (image_urls) updateData.image_urls = image_urls;
+    if (badge !== undefined) updateData.badge = badge || null;
+    if (in_stock !== undefined) updateData.in_stock = in_stock;
+    if (featured !== undefined) updateData.featured = featured;
+
+    if (!isPartialUpdate && !name && !category) {
       return NextResponse.json({ success: false, error: "Missing required fields" }, { status: 400 });
     }
 
-    const { data, error } = await supabase.from("products").upsert({
-      id,
-      name,
-      category,
-      subcategory: subcategory || null,
-      tags: tags || [],
-      colors: colors || [],
-      prices: prices || { A6: 22, A5: 69, A4: 109, A3: 159 },
-      image_url: image_url || null,
-      image_urls: image_urls || [],
-      badge: badge || null,
-      in_stock: in_stock !== false,
-      featured: featured || false,
-      updated_at: new Date().toISOString(),
-    }).select();
+    const { data, error } = await supabase.from("products").upsert(updateData).select();
 
     if (error) return NextResponse.json({ success: false, error: error.message }, { status: 500 });
 
