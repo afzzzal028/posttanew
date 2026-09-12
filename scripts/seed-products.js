@@ -104,7 +104,7 @@ const products = [
   { id: "darul-salam", name: "Dar Al Salam", category: "islamic", subcategory: "calligraphy", tags: ["dar", "salam", "peace"], colors: ["green", "white"] },
 ];
 
-const defaultPrices = { A6: 29, A5: 79, A4: 129, A3: 179 };
+const defaultPrices = { A6: 22, A5: 69, A4: 109, A3: 159 };
 
 async function seed() {
   console.log(`Seeding ${products.length} products...`);

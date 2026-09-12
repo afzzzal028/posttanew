@@ -52,7 +52,7 @@ export async function POST(req) {
       subcategory: subcategory || null,
       tags: tags || [],
       colors: colors || [],
-      prices: prices || { A6: 29, A5: 79, A4: 129, A3: 179 },
+      prices: prices || { A6: 22, A5: 69, A4: 109, A3: 159 },
       image_url: image_url || null,
       image_urls: image_urls || [],
       badge: badge || null,

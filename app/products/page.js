@@ -60,9 +60,9 @@ function ProductsContent() {
     }
 
     if (sortBy === "price-low") {
-      result.sort((a, b) => (a.prices?.A6 || 29) - (b.prices?.A6 || 29));
+      result.sort((a, b) => (a.prices?.A6 || 22) - (b.prices?.A6 || 29));
     } else if (sortBy === "price-high") {
-      result.sort((a, b) => (b.prices?.A3 || 179) - (a.prices?.A3 || 179));
+      result.sort((a, b) => (b.prices?.A3 || 159) - (a.prices?.A3 || 179));
     } else if (sortBy === "name") {
       result.sort((a, b) => a.name.localeCompare(b.name));
     }

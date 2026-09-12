@@ -65,8 +65,8 @@ export default function ProductDetail() {
     );
   }
 
-  const prices = product.prices || { A6: 29, A5: 79, A4: 129, A3: 179 };
-  const currentPrice = prices[selectedSize] || 29;
+  const prices = product.prices || { A6: 22, A5: 69, A4: 109, A3: 159 };
+  const currentPrice = prices[selectedSize] || 22;
   const allImages = [product.image_url, ...(product.image_urls || [])].filter(Boolean);
   const hasMultipleImages = allImages.length > 1;
   const currentImg = allImages[selectedImage] || allImages[0];
@@ -127,7 +127,7 @@ export default function ProductDetail() {
                   className={`p-3 border text-left transition-colors ${selectedSize === key ? "border-rose-500 bg-rose-50" : "border-gray-200 hover:border-gray-300"}`}>
                   <p className="font-bold text-sm">{size.label}</p>
                   <p className="text-[10px] text-gray-500">{size.dimensions}</p>
-                  <p className="font-black text-rose-600 mt-1">₹{prices[key] || 29}</p>
+                  <p className="font-black text-rose-600 mt-1">₹{prices[key] || 22}</p>
                 </button>
               ))}
             </div>
@@ -219,7 +219,7 @@ export default function ProductDetail() {
                   <td className="py-2 sm:py-3 px-2 sm:px-4 font-medium">{size.label}</td>
                   <td className="py-2 sm:py-3 px-2 sm:px-4 text-gray-600">{sizeGuide[key].cm} cm</td>
                   <td className="py-2 sm:py-3 px-2 sm:px-4 text-gray-600 hidden sm:table-cell">{sizeGuide[key].use}</td>
-                  <td className="py-2 sm:py-3 px-2 sm:px-4 text-right font-bold text-rose-600">₹{prices[key] || 29}</td>
+                  <td className="py-2 sm:py-3 px-2 sm:px-4 text-right font-bold text-rose-600">₹{prices[key] || 22}</td>
                 </tr>
               ))}
             </tbody>

@@ -68,7 +68,7 @@ export default function AdminPage() {
     if (bulkItems.length === 0) return;
     setBulkUploading(true);
     setBulkProgress({ current: 0, total: bulkItems.length });
-    const defaultPrices = { A6: 29, A5: 79, A4: 129, A3: 179 };
+    const defaultPrices = { A6: 22, A5: 69, A4: 109, A3: 159 };
 
     for (let i = 0; i < bulkItems.length; i++) {
       const item = bulkItems[i];
