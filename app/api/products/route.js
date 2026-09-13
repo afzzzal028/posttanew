@@ -61,6 +61,10 @@ export async function POST(req) {
     const hasAllFields = name && category;
     const updateData = { updated_at: new Date().toISOString() };
 
+    if (hasAllFields) {
+      updateData.created_at = new Date().toISOString();
+    }
+
     if (name) updateData.name = name;
     if (category) updateData.category = category;
     if (subcategory !== undefined) updateData.subcategory = subcategory || null;
