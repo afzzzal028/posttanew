@@ -84,15 +84,15 @@ export default function AdminPage() {
       setBulkItems((prev) => prev.map((x, idx) => idx === i ? { ...x, status: "uploading" } : x));
 
       try {
+        const productId = item.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") + "-" + Date.now().toString(36) + i;
         const fd = new FormData();
         fd.append("file", item.file);
-        fd.append("productId", item.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") + "-" + Date.now().toString(36) + i);
+        fd.append("productId", productId);
         fd.append("index", "0");
         const res = await fetch("/api/products/upload", { method: "POST", body: fd });
         const data = await res.json();
         if (data.url) {
-          const productId = item.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") + "-" + Date.now().toString(36) + i;
-          await fetch("/api/products", {
+          const saveRes = await fetch("/api/products", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -110,7 +110,12 @@ export default function AdminPage() {
               featured: false,
             }),
           });
-          setBulkItems((prev) => prev.map((x, idx) => idx === i ? { ...x, status: "done" } : x));
+          const saveData = await saveRes.json();
+          if (saveData.success) {
+            setBulkItems((prev) => prev.map((x, idx) => idx === i ? { ...x, status: "done" } : x));
+          } else {
+            setBulkItems((prev) => prev.map((x, idx) => idx === i ? { ...x, status: "error", error: saveData.error || "Save failed" } : x));
+          }
         } else {
           setBulkItems((prev) => prev.map((x, idx) => idx === i ? { ...x, status: "error", error: data.error || "Upload failed" } : x));
         }
