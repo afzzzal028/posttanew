@@ -35,7 +35,9 @@ export async function POST(req) {
       .from("product-images")
       .getPublicUrl(fileName);
 
-    return NextResponse.json({ success: true, url: urlData.publicUrl });
+    const cacheBustedUrl = urlData.publicUrl + "?t=" + Date.now();
+
+    return NextResponse.json({ success: true, url: cacheBustedUrl });
   } catch (err) {
     return NextResponse.json({ success: false, error: err.message }, { status: 500 });
   }

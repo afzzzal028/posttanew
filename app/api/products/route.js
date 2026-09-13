@@ -17,7 +17,13 @@ export async function GET(req) {
       query = query.eq("id", id);
       const { data, error } = await query.single();
       if (error) return NextResponse.json({ success: false, error: error.message }, { status: 404 });
-      return NextResponse.json({ success: true, data });
+      const bustTime = Date.now();
+      const busted = {
+        ...data,
+        image_url: data.image_url ? data.image_url.split("?")[0] + "?t=" + bustTime : data.image_url,
+        image_urls: (data.image_urls || []).map((u) => u ? u.split("?")[0] + "?t=" + bustTime : u),
+      };
+      return NextResponse.json({ success: true, data: busted });
     }
 
     if (category) query = query.eq("category", category);
@@ -27,7 +33,14 @@ export async function GET(req) {
     const { data, error } = await query;
     if (error) return NextResponse.json({ success: false, error: error.message }, { status: 500 });
 
-    return NextResponse.json({ success: true, data });
+    const bustTime = Date.now();
+    const bustedData = (data || []).map((p) => ({
+      ...p,
+      image_url: p.image_url ? p.image_url.split("?")[0] + "?t=" + bustTime : p.image_url,
+      image_urls: (p.image_urls || []).map((u) => u ? u.split("?")[0] + "?t=" + bustTime : u),
+    }));
+
+    return NextResponse.json({ success: true, data: bustedData });
   } catch (err) {
     return NextResponse.json({ success: false, error: err.message }, { status: 500 });
   }
