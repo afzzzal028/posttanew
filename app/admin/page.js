@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import ProductForm from "@/components/ProductForm";
 import BannerForm from "@/components/BannerForm";
 import SectionForm from "@/components/SectionForm";
+import PageEditor from "@/components/PageEditor";
 
 const statusColors = {
   pending: "bg-amber-100 text-amber-700",
@@ -53,6 +54,7 @@ export default function AdminPage() {
   const [sections, setSections] = useState([]);
   const [showSectionForm, setShowSectionForm] = useState(false);
   const [editingSection, setEditingSection] = useState(null);
+  const [pageSettings, setPageSettings] = useState({});
 
   function addBulkFiles(fileList) {
     const newItems = Array.from(fileList)
@@ -202,10 +204,11 @@ export default function AdminPage() {
   async function loadData() {
     setLoading(true);
     try {
-      const [dataRes, bannersRes, sectionsRes] = await Promise.all([
+      const [dataRes, bannersRes, sectionsRes, settingsRes] = await Promise.all([
         fetch("/api/admin/data").then((r) => r.json()),
         fetch("/api/admin/banners").then((r) => r.json()).catch(() => ({ success: false, data: [] })),
         fetch("/api/admin/sections").then((r) => r.json()).catch(() => ({ success: false, data: [] })),
+        fetch("/api/settings").then((r) => r.json()).catch(() => ({ success: true, data: {} })),
       ]);
       if (dataRes.success) {
         setOrders(dataRes.orders || []);
@@ -215,6 +218,7 @@ export default function AdminPage() {
       }
       if (bannersRes.success) setBanners(bannersRes.data || []);
       if (sectionsRes.success) setSections(sectionsRes.data || []);
+      if (settingsRes.success) setPageSettings(settingsRes.data || {});
     } catch {}
     setLoading(false);
   }
@@ -317,6 +321,15 @@ export default function AdminPage() {
     loadData();
   }
 
+  async function savePageSettings(data) {
+    await fetch("/api/settings", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ key: "homepage", value: data }),
+    });
+    setPageSettings(data);
+  }
+
   async function handleLogout() {
     await fetch("/api/admin/auth", { method: "DELETE" });
     router.push("/admin/login");
@@ -409,7 +422,7 @@ export default function AdminPage() {
 
         {/* Tabs */}
         <div className="flex gap-1 mb-4 overflow-x-auto pb-1">
-          {["all", "pending", "confirmed", "shipped", "delivered", "cancelled", "archived", "tickets", "products", "banners", "sections"].map((t) => (
+          {["all", "pending", "confirmed", "shipped", "delivered", "cancelled", "archived", "tickets", "products", "banners", "sections", "editor"].map((t) => (
             <button key={t} onClick={() => setTab(t)}
               className={`px-3 py-1.5 text-xs font-bold uppercase whitespace-nowrap transition-colors ${
                 tab === t ? "bg-gray-900 text-white" : "bg-white text-gray-600 border border-gray-200 hover:bg-gray-50"
@@ -812,6 +825,13 @@ export default function AdminPage() {
                 ))}
               </div>
             )}
+          </div>
+        )}
+
+        {/* Page Editor View */}
+        {tab === "editor" && (
+          <div>
+            <PageEditor settings={pageSettings} onSave={savePageSettings} />
           </div>
         )}
       </div>

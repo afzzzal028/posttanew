@@ -16,6 +16,7 @@ export default function Home() {
   const [banners, setBanners] = useState([]);
   const [sections, setSections] = useState([]);
   const [bannerSpeed, setBannerSpeed] = useState(30);
+  const [pageSettings, setPageSettings] = useState(null);
 
   useEffect(() => {
     fetch("/api/products")
@@ -37,6 +38,12 @@ export default function Home() {
       .then((res) => res.json())
       .then((data) => {
         if (data.success) setSections(data.data || []);
+      })
+      .catch(() => {});
+    fetch("/api/settings?key=homepage")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && data.data) setPageSettings(data.data);
       })
       .catch(() => {});
   }, []);
