@@ -5,7 +5,7 @@ import ProductCard from "@/components/ProductCard";
 import { categories } from "@/data/products";
 import { useState, useEffect } from "react";
 
-const rooms = [
+const defaultRooms = [
   { id: 1, src: "/mockups/room-1.svg", title: "Car enthusiastSetup", desc: "16 A4 posters + 6 A6 cards" },
   { id: 2, src: "/mockups/room-2.svg", title: "Gaming Room Dark", desc: "20 A4 posters + 10 A6 cards" },
   { id: 3, src: "/mockups/room-3.svg", title: "Minimalist Bedroom", desc: "12 A4 posters + 8 A6 cards" },
@@ -14,6 +14,7 @@ const rooms = [
 export default function Home() {
   const [products, setProducts] = useState([]);
   const [banners, setBanners] = useState([]);
+  const [sections, setSections] = useState([]);
   const [bannerSpeed, setBannerSpeed] = useState(30);
 
   useEffect(() => {
@@ -30,6 +31,12 @@ export default function Home() {
           setBanners(data.data || []);
           if (data.speed) setBannerSpeed(data.speed);
         }
+      })
+      .catch(() => {});
+    fetch("/api/sections")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) setSections(data.data || []);
       })
       .catch(() => {});
   }, []);
@@ -128,18 +135,30 @@ export default function Home() {
           <span className="bg-rose-100 text-rose-700 text-[10px] sm:text-xs font-bold px-2 py-1 uppercase">Download & Inspo</span>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-          {rooms.map((room) => (
-            <div key={room.id} className="group relative overflow-hidden border border-gray-200 bg-white">
-              <div className="relative aspect-[3/2]">
-                <Image src={room.src} alt={room.title} fill className="object-cover group-hover:scale-105 transition-transform duration-500" unoptimized />
-              </div>
-              <div className="p-3 sm:p-4">
-                <p className="font-bold text-sm sm:text-base text-gray-900">{room.title}</p>
-                <p className="text-xs sm:text-sm text-gray-500">{room.desc}</p>
-                <Link href="/products" className="inline-block mt-2 text-xs sm:text-sm font-bold text-rose-600 hover:underline">Shop This Look →</Link>
-              </div>
-            </div>
-          ))}
+          {(sections.length > 0 ? sections : defaultRooms).filter((s) => s.active !== false).map((room) => {
+            const Wrapper = room.link ? Link : "div";
+            const wrapperProps = room.link ? { href: room.link } : {};
+            return (
+              <Wrapper key={room.id} {...wrapperProps} className="group relative overflow-hidden border border-gray-200 bg-white">
+                <div className="relative aspect-[3/2]">
+                  {room.image_url || room.src ? (
+                    <img src={room.image_url || room.src} alt={room.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  ) : (
+                    <div className="w-full h-full bg-gray-100 flex items-center justify-center"><span className="text-3xl">🖼️</span></div>
+                  )}
+                </div>
+                <div className="p-3 sm:p-4">
+                  <p className="font-bold text-sm sm:text-base text-gray-900">{room.title}</p>
+                  <p className="text-xs sm:text-sm text-gray-500">{room.desc || room.subtitle}</p>
+                  {room.link ? (
+                    <span className="inline-block mt-2 text-xs sm:text-sm font-bold text-rose-600 hover:underline">Shop This Look →</span>
+                  ) : (
+                    <Link href="/products" className="inline-block mt-2 text-xs sm:text-sm font-bold text-rose-600 hover:underline">Shop This Look →</Link>
+                  )}
+                </div>
+              </Wrapper>
+            );
+          })}
         </div>
       </section>
 

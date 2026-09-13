@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 
 import ProductForm from "@/components/ProductForm";
 import BannerForm from "@/components/BannerForm";
+import SectionForm from "@/components/SectionForm";
 
 const statusColors = {
   pending: "bg-amber-100 text-amber-700",
@@ -49,6 +50,9 @@ export default function AdminPage() {
   const [bulkAction, setBulkAction] = useState("");
   const [bulkActionCat, setBulkActionCat] = useState("islamic");
   const [bulkActionRunning, setBulkActionRunning] = useState(false);
+  const [sections, setSections] = useState([]);
+  const [showSectionForm, setShowSectionForm] = useState(false);
+  const [editingSection, setEditingSection] = useState(null);
 
   function addBulkFiles(fileList) {
     const newItems = Array.from(fileList)
@@ -193,9 +197,10 @@ export default function AdminPage() {
   async function loadData() {
     setLoading(true);
     try {
-      const [dataRes, bannersRes] = await Promise.all([
+      const [dataRes, bannersRes, sectionsRes] = await Promise.all([
         fetch("/api/admin/data").then((r) => r.json()),
         fetch("/api/admin/banners").then((r) => r.json()).catch(() => ({ success: false, data: [] })),
+        fetch("/api/admin/sections").then((r) => r.json()).catch(() => ({ success: false, data: [] })),
       ]);
       if (dataRes.success) {
         setOrders(dataRes.orders || []);
@@ -204,6 +209,7 @@ export default function AdminPage() {
         setProducts(dataRes.products || []);
       }
       if (bannersRes.success) setBanners(bannersRes.data || []);
+      if (sectionsRes.success) setSections(sectionsRes.data || []);
     } catch {}
     setLoading(false);
   }
@@ -286,6 +292,23 @@ export default function AdminPage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id, active: !currentActive }),
     });
+    loadData();
+  }
+
+  async function saveSection(sectionData) {
+    await fetch("/api/admin/sections", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(sectionData),
+    });
+    setShowSectionForm(false);
+    setEditingSection(null);
+    loadData();
+  }
+
+  async function deleteSection(id) {
+    if (!confirm("Delete this section?")) return;
+    await fetch(`/api/admin/sections?id=${id}`, { method: "DELETE" });
     loadData();
   }
 
@@ -381,7 +404,7 @@ export default function AdminPage() {
 
         {/* Tabs */}
         <div className="flex gap-1 mb-4 overflow-x-auto pb-1">
-          {["all", "pending", "confirmed", "shipped", "delivered", "cancelled", "archived", "tickets", "products", "banners"].map((t) => (
+          {["all", "pending", "confirmed", "shipped", "delivered", "cancelled", "archived", "tickets", "products", "banners", "sections"].map((t) => (
             <button key={t} onClick={() => setTab(t)}
               className={`px-3 py-1.5 text-xs font-bold uppercase whitespace-nowrap transition-colors ${
                 tab === t ? "bg-gray-900 text-white" : "bg-white text-gray-600 border border-gray-200 hover:bg-gray-50"
@@ -740,6 +763,52 @@ export default function AdminPage() {
             )}
           </div>
         )}
+
+        {/* Sections View */}
+        {tab === "sections" && (
+          <div>
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-xs text-gray-500">{sections.length} sections</p>
+              <button onClick={() => { setEditingSection(null); setShowSectionForm(true); }}
+                className="px-4 py-2 bg-rose-600 text-white text-xs font-bold hover:bg-rose-700">+ Add Section</button>
+            </div>
+            {sections.length === 0 ? (
+              <div className="bg-white border border-gray-200 p-8 text-center text-gray-400 text-sm">
+                No sections yet. Add your first section card!
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {sections.map((sec) => (
+                  <div key={sec.id} className="bg-white border border-gray-200 p-3">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex gap-3">
+                        <div className="w-24 h-16 bg-gray-100 flex items-center justify-center shrink-0 overflow-hidden">
+                          {sec.image_url ? (
+                            <img src={sec.image_url} alt="" className="w-full h-full object-cover" />
+                          ) : (
+                            <span className="text-xl">🖼️</span>
+                          )}
+                        </div>
+                        <div>
+                          <p className="font-bold text-xs">{sec.title}</p>
+                          <p className="text-[10px] text-gray-500">{sec.subtitle}</p>
+                          <p className="text-[9px] text-gray-400 mt-0.5">Order: {sec.sort_order} | {sec.active ? "Active" : "Hidden"}</p>
+                          {sec.link && <p className="text-[9px] text-blue-500 mt-0.5">{sec.link}</p>}
+                        </div>
+                      </div>
+                      <div className="flex gap-1 shrink-0">
+                        <button onClick={() => { setEditingSection(sec); setShowSectionForm(true); }}
+                          className="px-2 py-1 bg-gray-100 text-[10px] font-bold hover:bg-gray-200">Edit</button>
+                        <button onClick={() => deleteSection(sec.id)}
+                          className="px-2 py-1 bg-red-50 text-red-600 text-[10px] font-bold hover:bg-red-100">Del</button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Product Form Modal */}
@@ -757,6 +826,15 @@ export default function AdminPage() {
           banner={editingBanner}
           onSave={saveBanner}
           onCancel={() => { setShowBannerForm(false); setEditingBanner(null); }}
+        />
+      )}
+
+      {/* Section Form Modal */}
+      {showSectionForm && (
+        <SectionForm
+          section={editingSection}
+          onSave={saveSection}
+          onCancel={() => { setShowSectionForm(false); setEditingSection(null); }}
         />
       )}
 

@@ -45,8 +45,8 @@ export async function POST(req) {
       return NextResponse.json({ success: false, error: "Missing product id" }, { status: 400 });
     }
 
-    const isPartialUpdate = !name && !category;
-    const updateData = { id, updated_at: new Date().toISOString() };
+    const hasAllFields = name && category;
+    const updateData = { updated_at: new Date().toISOString() };
 
     if (name) updateData.name = name;
     if (category) updateData.category = category;
@@ -60,11 +60,14 @@ export async function POST(req) {
     if (in_stock !== undefined) updateData.in_stock = in_stock;
     if (featured !== undefined) updateData.featured = featured;
 
-    if (!isPartialUpdate && !name && !category) {
-      return NextResponse.json({ success: false, error: "Missing required fields" }, { status: 400 });
+    let result;
+    if (hasAllFields) {
+      result = await supabase.from("products").upsert(updateData).select();
+    } else {
+      result = await supabase.from("products").update(updateData).eq("id", id).select();
     }
 
-    const { data, error } = await supabase.from("products").upsert(updateData).select();
+    const { data, error } = result;
 
     if (error) return NextResponse.json({ success: false, error: error.message }, { status: 500 });
 
