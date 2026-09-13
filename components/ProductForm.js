@@ -147,7 +147,7 @@ export default function ProductForm({ product, onSave, onCancel }) {
                   onDrop={(e) => handleDrop(e, i)}>
                   {form.image_urls[i] ? (
                     <div className={`relative aspect-square border overflow-hidden bg-gray-50 ${dragOver === i ? "border-rose-400 bg-rose-50" : "border-gray-200"}`}>
-                      <img src={form.image_urls[i]} alt="" className="w-full h-full object-cover" />
+                      <img src={form.image_urls[i]} alt="" className="w-full h-full object-contain" />
                       {uploading === i && (
                         <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
                           <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>

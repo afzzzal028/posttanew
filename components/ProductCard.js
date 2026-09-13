@@ -33,7 +33,7 @@ export default function ProductCard({ product }) {
             <img
               src={product.image_url}
               alt={product.name}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
               onError={() => setImgError(true)}
             />
           ) : (
@@ -41,7 +41,7 @@ export default function ProductCard({ product }) {
               src={`/mockups/${product.category}.svg`}
               alt={product.name}
               fill
-              className="object-cover group-hover:scale-105 transition-transform duration-500"
+              className="object-contain group-hover:scale-105 transition-transform duration-500"
               unoptimized
             />
           )}

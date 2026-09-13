@@ -64,7 +64,7 @@ export default function SectionForm({ section, onSave, onCancel }) {
             <div className="flex gap-2 items-start">
               <label className="flex-1 aspect-video border border-dashed border-gray-300 flex items-center justify-center cursor-pointer hover:border-rose-400 bg-gray-50 overflow-hidden">
                 {form.image_url ? (
-                  <img src={form.image_url} alt="" className="w-full h-full object-cover" />
+                  <img src={form.image_url} alt="" className="w-full h-full object-contain" />
                 ) : (
                   <div className="text-center p-4">
                     <span className="text-2xl">📸</span>

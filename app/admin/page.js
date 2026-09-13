@@ -666,7 +666,7 @@ export default function AdminPage() {
                           onChange={() => toggleProductSelect(product.id)} className="accent-rose-600" />
                         <div className="w-16 h-16 bg-gray-100 flex items-center justify-center shrink-0 overflow-hidden">
                           {product.image_url ? (
-                            <img src={product.image_url} alt={product.name} className="w-full h-full object-cover" />
+                            <img src={product.image_url} alt={product.name} className="w-full h-full object-contain" />
                           ) : (
                             <span className="text-2xl">🖼️</span>
                           )}
@@ -784,7 +784,7 @@ export default function AdminPage() {
                       <div className="flex gap-3">
                         <div className="w-24 h-16 bg-gray-100 flex items-center justify-center shrink-0 overflow-hidden">
                           {sec.image_url ? (
-                            <img src={sec.image_url} alt="" className="w-full h-full object-cover" />
+                            <img src={sec.image_url} alt="" className="w-full h-full object-contain" />
                           ) : (
                             <span className="text-xl">🖼️</span>
                           )}
@@ -910,7 +910,7 @@ export default function AdminPage() {
                     {bulkItems.map((item, i) => (
                       <div key={i} className={`flex items-center gap-2 p-2 ${item.status === "done" ? "bg-green-50" : item.status === "error" ? "bg-red-50" : item.status === "uploading" ? "bg-blue-50" : ""}`}>
                         <div className="w-10 h-10 bg-gray-100 flex items-center justify-center shrink-0 overflow-hidden">
-                          <img src={URL.createObjectURL(item.file)} alt="" className="w-full h-full object-cover" />
+                          <img src={URL.createObjectURL(item.file)} alt="" className="w-full h-full object-contain" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <input type="text" value={item.name} onChange={(e) => updateBulkName(i, e.target.value)} disabled={bulkUploading}

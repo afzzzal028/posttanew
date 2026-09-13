@@ -142,7 +142,7 @@ export default function Home() {
               <Wrapper key={room.id} {...wrapperProps} className="group relative overflow-hidden border border-gray-200 bg-white">
                 <div className="relative aspect-[3/2]">
                   {room.image_url || room.src ? (
-                    <img src={room.image_url || room.src} alt={room.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    <img src={room.image_url || room.src} alt={room.title} className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500" />
                   ) : (
                     <div className="w-full h-full bg-gray-100 flex items-center justify-center"><span className="text-3xl">🖼️</span></div>
                   )}

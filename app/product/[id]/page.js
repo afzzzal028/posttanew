@@ -92,7 +92,7 @@ export default function ProductDetail() {
         <div>
           <div className="aspect-square bg-gray-100 border border-gray-200 overflow-hidden">
             {hasImage ? (
-              <img src={currentImg} alt={product.name} className="w-full h-full object-cover" onError={() => setImgError(true)} />
+              <img src={currentImg} alt={product.name} className="w-full h-full object-contain" onError={() => setImgError(true)} />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-6xl">🖼️</div>
             )}
@@ -102,7 +102,7 @@ export default function ProductDetail() {
               {allImages.map((img, i) => (
                 <button key={i} onClick={() => { setSelectedImage(i); setImgError(false); }}
                   className={`w-16 h-16 border-2 overflow-hidden ${selectedImage === i ? "border-rose-500" : "border-gray-200 hover:border-gray-400"}`}>
-                  <img src={img} alt="" className="w-full h-full object-cover" />
+                  <img src={img} alt="" className="w-full h-full object-contain" />
                 </button>
               ))}
             </div>
