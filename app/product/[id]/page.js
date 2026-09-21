@@ -65,7 +65,7 @@ export default function ProductDetail() {
     </div>
   );
 
-  const prices = product.prices || { A6: 22, A5: 69, A4: 109, A3: 159 };
+  const prices = product.prices || { A6: 22, A5: 59, A4: 99, A3: 149 };
   const currentPrice = prices[selectedSize] || 22;
   const allImages = [product.image_url, ...(product.image_urls || [])].filter(Boolean);
   const currentImg = allImages[selectedImage] || allImages[0];
@@ -227,9 +227,9 @@ export default function ProductDetail() {
         <h2 className="text-xl sm:text-2xl font-black text-gray-900 mb-4">Bundle &amp; Save</h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {[
-            { buy: "3 A4 Posters", price: 249, original: 327, save: 78 },
-            { buy: "5 A4 Posters", price: 399, original: 545, save: 146 },
-            { buy: "10 A4 Posters", price: 699, original: 1090, save: 391 },
+            { buy: "3 A4 Posters", price: 249, original: 297, save: 48 },
+            { buy: "5 A4 Posters", price: 399, original: 495, save: 96 },
+            { buy: "10 A4 Posters", price: 699, original: 990, save: 291 },
           ].map((c, i) => (
             <div key={i} className="bg-white border border-gray-200 p-4 hover:shadow-md transition-shadow">
               <p className="text-sm font-bold text-gray-900 mb-1">{c.buy}</p>

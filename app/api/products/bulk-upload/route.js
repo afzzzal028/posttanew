@@ -16,7 +16,7 @@ export async function POST(req) {
     }
 
     const results = [];
-    const defaultPrices = { A6: 22, A5: 69, A4: 109, A3: 159 };
+    const defaultPrices = { A6: 22, A5: 59, A4: 99, A3: 149 };
 
     for (let i = 0; i < files.length; i++) {
       const file = files[i];

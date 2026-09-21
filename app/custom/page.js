@@ -3,9 +3,9 @@ import { useState, useRef } from "react";
 
 const sizes = [
   { id: "A6", label: "A6 Card", price: 22, note: "10.5 x 14.8 cm" },
-  { id: "A5", label: "A5 Poster", price: 69, note: "14.8 x 21 cm" },
-  { id: "A4", label: "A4 Poster", price: 109, note: "21 x 29.7 cm" },
-  { id: "A3", label: "A3 Poster", price: 159, note: "29.7 x 42 cm" },
+  { id: "A5", label: "A5 Poster", price: 59, note: "14.8 x 21 cm" },
+  { id: "A4", label: "A4 Poster", price: 99, note: "21 x 29.7 cm" },
+  { id: "A3", label: "A3 Poster", price: 149, note: "29.7 x 42 cm" },
 ];
 
 export default function CustomPage() {

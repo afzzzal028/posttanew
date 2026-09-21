@@ -3,7 +3,7 @@ import { useState, useRef } from "react";
 
 const categories = ["cars", "anime", "gaming", "sports", "marvel", "dc", "movies", "music", "motivational", "islamic"];
 
-const defaultPrices = { A6: 22, A5: 69, A4: 109, A3: 159 };
+const defaultPrices = { A6: 22, A5: 59, A4: 99, A3: 149 };
 
 export default function ProductForm({ product, onSave, onCancel }) {
   const [form, setForm] = useState({

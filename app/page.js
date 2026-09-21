@@ -5,10 +5,10 @@ import { categories } from "@/data/products";
 import { useState, useEffect } from "react";
 
 const bundles = [
-  { label: "3 A4 Posters", price: 249, original: 327, count: 3, size: "A4" },
-  { label: "5 A4 Posters", price: 399, original: 545, count: 5, size: "A4" },
-  { label: "10 A4 Posters", price: 699, original: 1090, count: 10, size: "A4" },
-  { label: "5+1 FREE A5", price: 250, original: 414, count: 6, size: "A5" },
+  { label: "3 A4 Posters", price: 249, original: 297, count: 3, size: "A4" },
+  { label: "5 A4 Posters", price: 399, original: 495, count: 5, size: "A4" },
+  { label: "10 A4 Posters", price: 699, original: 990, count: 10, size: "A4" },
+  { label: "5+1 FREE A5", price: 250, original: 354, count: 6, size: "A5" },
 ];
 
 const roomWalls = [
@@ -69,15 +69,11 @@ export default function Home() {
             <h1 className="text-4xl sm:text-6xl md:text-7xl font-black text-white mb-3 tracking-tight leading-none">
               YOUR WALL.<br /><span className="text-rose-500">YOUR WORLD.</span>
             </h1>
-            <p className="text-sm sm:text-lg text-gray-300 mb-4 max-w-xl mx-auto">Posters for the things you actually love.</p>
-            <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-6">
-              {heroCategories.map((c) => (
-                <span key={c} className="text-[10px] sm:text-xs font-bold text-gray-400 border border-gray-700 px-3 py-1 rounded-full hover:text-white hover:border-gray-500 transition-colors">{c}</span>
-              ))}
-            </div>
+            <p className="text-sm sm:text-lg text-gray-300 mb-5 max-w-xl mx-auto">Posters for the things you actually love.</p>
+            <p className="text-xs sm:text-sm text-gray-500 mb-5 font-medium">Football &middot; F1 &middot; Anime &middot; Cars &middot; Gaming &middot; Movies</p>
             <div className="flex flex-wrap justify-center gap-4 sm:gap-6 mb-6 text-white">
               <div className="text-center"><p className="text-xl sm:text-2xl font-black">22</p><p className="text-[9px] sm:text-[10px] text-gray-400 uppercase tracking-wider">A6 From</p></div>
-              <div className="text-center"><p className="text-xl sm:text-2xl font-black">109</p><p className="text-[9px] sm:text-[10px] text-gray-400 uppercase tracking-wider">A4 From</p></div>
+              <div className="text-center"><p className="text-xl sm:text-2xl font-black">99</p><p className="text-[9px] sm:text-[10px] text-gray-400 uppercase tracking-wider">A4 From</p></div>
             </div>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link href="/products" className="bg-rose-600 text-white px-8 py-3.5 font-bold text-sm sm:text-base hover:bg-rose-700 transition-colors text-center">SHOP POSTERS &rarr;</Link>
@@ -154,17 +150,24 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
           <div className="text-center mb-8">
             <h2 className="text-2xl sm:text-3xl font-black text-gray-900 mb-2">BUILD YOUR WALL</h2>
-            <p className="text-sm text-gray-500">Mix &amp; match any designs. The more you buy, the more you save.</p>
+            <p className="text-sm text-gray-500">Pick your favourites. Mix &amp; match any designs.</p>
           </div>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             {bundles.map((b) => (
-              <Link key={b.label} href="/products" className="group bg-gray-50 border border-gray-200 p-5 text-center hover:border-rose-300 hover:shadow-md transition-all">
-                <p className="text-[10px] font-bold text-rose-600 uppercase tracking-wider mb-1">{b.count} Posters Pack</p>
-                <p className="text-xl sm:text-2xl font-black text-gray-900 mb-1">{b.price}</p>
-                <p className="text-[10px] text-gray-400 line-through mb-1">{b.original}</p>
-                <p className="text-[10px] font-bold text-green-600 mb-3">SAVE {savingsPct(b.original, b.price)}%</p>
-                <div className="bg-gray-900 text-white py-2 text-xs font-bold group-hover:bg-rose-600 transition-colors">{b.label} &rarr;</div>
-              </Link>
+              <div key={b.label} className="group bg-gray-50 border border-gray-200 p-5 text-center hover:border-rose-300 hover:shadow-md transition-all flex flex-col">
+                <p className="text-[10px] font-bold text-rose-600 uppercase tracking-wider mb-1">{b.label}</p>
+                <p className="text-xl sm:text-2xl font-black text-gray-900 mb-1">{"\u20B9"}{b.price}</p>
+                <p className="text-[10px] text-gray-400 line-through mb-1">{"\u20B9"}{b.original}</p>
+                <p className="text-[10px] font-bold text-green-600 mb-3">SAVE {"\u20B9"}{b.original - b.price}</p>
+                <div className="mt-auto">
+                  <button onClick={() => {
+                    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+                    cart.push({ id: `bundle-${b.label}`, name: b.label, size: b.size, price: b.price, quantity: 1, image_url: "/mockups/cars.svg", category: "bundle" });
+                    localStorage.setItem("cart", JSON.stringify(cart));
+                    window.dispatchEvent(new Event("cart-updated"));
+                  }} className="w-full bg-gray-900 text-white py-2.5 text-xs font-bold group-hover:bg-rose-600 transition-colors">ADD TO CART &rarr;</button>
+                </div>
+              </div>
             ))}
           </div>
         </div>
@@ -209,7 +212,7 @@ export default function Home() {
               <div className="relative z-10 text-center">
                 <span className="text-3xl mb-2 block">{w.icon}</span>
                 <p className="text-white font-bold text-sm">{w.title}</p>
-                <p className="text-white/70 text-[10px]">{w.count} posters &mdash; {w.price}</p>
+                <p className="text-white/70 text-[10px]">{w.count} posters &mdash; {"\u20B9"}{w.price}</p>
                 <span className="inline-block mt-2 text-white text-[10px] font-bold border-b border-white/50 pb-0.5 group-hover:border-white transition-colors">SHOP THIS WALL &rarr;</span>
               </div>
             </Link>
@@ -239,8 +242,8 @@ export default function Home() {
                     <p className="text-xs text-green-600 font-medium mb-3">+ {b.subtitle}</p>
                     {features.includes("price") && (
                       <div className="flex items-baseline gap-2 mb-3">
-                        <span className="text-xl font-black text-rose-600">{b.price}</span>
-                        {features.includes("strikethrough") && b.original_price > 0 && <span className="text-sm line-through text-gray-400">{b.original_price}</span>}
+                        <span className="text-xl font-black text-rose-600">{"\u20B9"}{b.price}</span>
+                        {features.includes("strikethrough") && b.original_price > 0 && <span className="text-sm line-through text-gray-400">{"\u20B9"}{b.original_price}</span>}
                       </div>
                     )}
                     <Link href={linkHref} className="block w-full py-2 bg-rose-600 text-white font-bold text-xs text-center hover:bg-rose-700 transition-colors">
@@ -289,15 +292,38 @@ export default function Home() {
         </div>
       </section>
 
+      {/* FROM @POSTTA.IN */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
+        <h2 className="text-xl sm:text-2xl font-black text-gray-900 mb-2 text-center">FROM @POSTTA.IN</h2>
+        <p className="text-sm text-gray-500 mb-6 text-center">Follow us for new drops, customer walls &amp; behind the scenes.</p>
+        <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
+          {["Reel Screenshot", "Customer Wall", "Poster Close-up", "Packaging", "Room Mockup", "New Collection"].map((label, i) => (
+            <div key={i} className="aspect-square bg-gray-100 border border-gray-200 flex items-center justify-center hover:shadow-md transition-shadow cursor-pointer">
+              <span className="text-[9px] text-gray-400 font-bold text-center px-1">{label}</span>
+            </div>
+          ))}
+        </div>
+        <div className="text-center mt-4">
+          <a href="https://www.instagram.com/postta.in/" target="_blank" rel="noopener noreferrer" className="inline-block bg-gradient-to-r from-purple-600 to-pink-500 text-white px-6 py-2.5 font-bold text-xs sm:text-sm hover:opacity-90 transition-opacity">FOLLOW POSTTA &rarr;</a>
+        </div>
+      </section>
+
       {/* WHY POSTTA */}
       <section className="bg-white border-y border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
           <h2 className="text-xl sm:text-2xl font-black text-gray-900 mb-6 text-center">WHY POSTTA?</h2>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-            {trustItems.map((t, i) => (
-              <div key={i} className="flex flex-col items-center text-center gap-2">
-                <span className="text-2xl sm:text-3xl">{t.icon}</span>
-                <p className="font-bold text-xs sm:text-sm text-gray-900">{t.text}</p>
+            {[
+              { icon: "\uD83C\uDFAF", text: "Curated Collections", sub: "Designs around things you love" },
+              { icon: "\uD83D\uDD17", text: "Mix & Match", sub: "Build your own combination" },
+              { icon: "\uD83D\uDDBC\uFE0F", text: "See It On Your Wall", sub: "Room-inspired setups" },
+              { icon: "\uD83C\uDFA8", text: "Custom Printing", sub: "Your image becomes wall art" },
+              { icon: "\uD83D\uDCE6", text: "Careful Packaging", sub: "Designed to arrive safely" },
+            ].map((item, i) => (
+              <div key={i} className="text-center p-3">
+                <span className="text-2xl sm:text-3xl block mb-1">{item.icon}</span>
+                <p className="font-bold text-xs sm:text-sm text-gray-900 mb-0.5">{item.text}</p>
+                <p className="text-[9px] text-gray-500">{item.sub}</p>
               </div>
             ))}
           </div>
@@ -323,9 +349,9 @@ export default function Home() {
       {/* FINAL CTA */}
       <section className="bg-gray-950">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-14 text-center">
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-white mb-3">Ready to Transform Your Wall?</h2>
-          <p className="text-gray-400 text-sm sm:text-base mb-5 max-w-xl mx-auto px-4">Pick what you love. Mix it together. Build your wall.</p>
-          <Link href="/products" className="inline-block bg-rose-600 text-white px-8 py-3.5 font-bold text-sm sm:text-base hover:bg-rose-700 transition-colors">Shop Now &rarr;</Link>
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-white mb-3">FOUND YOURS?</h2>
+          <p className="text-gray-400 text-sm sm:text-base mb-5 max-w-xl mx-auto px-4">Pick your favourites. Build your wall.</p>
+          <Link href="/products" className="inline-block bg-rose-600 text-white px-8 py-3.5 font-bold text-sm sm:text-base hover:bg-rose-700 transition-colors">SHOP THE COLLECTION &rarr;</Link>
         </div>
       </section>
     </div>

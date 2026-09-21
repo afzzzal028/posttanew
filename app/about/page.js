@@ -26,7 +26,7 @@ export default function AboutPage() {
           We print on <strong>200 GSM premium paper</strong> with a glossy powder finish. Every poster feels thick, shiny, and built to last. Not the thin, floppy prints you see elsewhere.
         </p>
         <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
-          Prices start at <strong>{"\u20B9"}22 for A6 cards</strong> and go up to <strong>{"\u20B9"}159 for A3 posters</strong>. We also do <strong>custom posters</strong> &mdash; upload any image and we'll print it for you.
+          Prices start at <strong>{"\u20B9"}22 for A6 cards</strong> and go up to <strong>{"\u20B9"}149 for A3 posters</strong>. We also do <strong>custom posters</strong> &mdash; upload any image and we'll print it for you.
         </p>
       </div>
 
