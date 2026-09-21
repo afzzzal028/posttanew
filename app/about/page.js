@@ -1,40 +1,69 @@
+"use client";
+import Link from "next/link";
+
 export default function AboutPage() {
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12">
-      <h1 className="text-3xl font-black text-gray-900 mb-6">About POSTTA</h1>
-      <div className="prose prose-gray max-w-none">
-        <p className="text-gray-600 text-lg mb-4">
-          Welcome to POSTTA — your one-stop destination for premium posters and wall art.
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
+      {/* Hero */}
+      <div className="text-center mb-12">
+        <h1 className="text-3xl sm:text-5xl font-black text-gray-900 mb-4 leading-tight">
+          YOUR WALL SHOULD SAY<br />SOMETHING ABOUT YOU.
+        </h1>
+        <p className="text-sm sm:text-lg text-gray-600 max-w-xl mx-auto leading-relaxed">
+          POSTTA started with a simple idea: you shouldn't need to spend thousands to make your room feel like yours.
         </p>
-        <p className="text-gray-600 mb-4">
-          We started with a simple idea: everyone deserves to have a cool room without breaking the bank.
-          That's why we offer high-quality posters at prices that won&apos;t empty your wallet.
+      </div>
+
+      {/* Story */}
+      <div className="space-y-6 mb-12">
+        <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
+          Football. F1. Anime. Cars. Gaming. Movies. Music.
         </p>
-        <h2 className="text-xl font-bold text-gray-900 mt-8 mb-3">What We Offer</h2>
-        <ul className="space-y-2 text-gray-600">
-          <li>🏎️ <strong>Cars & Bikes</strong> — Supercars, Muscle Cars, JDM Legends</li>
-          <li>⚔️ <strong>Anime</strong> — Naruto, One Piece, Dragon Ball, Jujutsu Kaisen</li>
-          <li>🎮 <strong>Gaming</strong> — GTA, Valorant, Minecraft, God of War</li>
-          <li>⚽ <strong>Sports</strong> — Football, Cricket, F1, UFC</li>
-          <li>🦸 <strong>Marvel & DC</strong> — Avengers, Batman, Spider-Man</li>
-          <li>🎬 <strong>Movies</strong> — Fight Club, Interstellar, Inception</li>
-          <li>🎵 <strong>Music</strong> — Hip-Hop, Vinyl Aesthetic</li>
-          <li>💪 <strong>Motivational</strong> — Hustle, Discipline, Grind</li>
-          <li>🕉️ <strong>Devotional</strong> — Krishna, Hanuman, Ganesha</li>
-        </ul>
-        <h2 className="text-xl font-bold text-gray-900 mt-8 mb-3">Quality Promise</h2>
-        <p className="text-gray-600 mb-4">
-          All our posters are printed on <strong>200gsm premium paper</strong> with powder color printing
-          for a slightly shiny, premium finish. We ensure every print meets our quality standards before shipping.
+        <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
+          Pick what you love. Mix it together. Build your wall.
         </p>
-        <h2 className="text-xl font-bold text-gray-900 mt-8 mb-3">Contact</h2>
-        <p className="text-gray-600">
-          📱 Instagram: <a href="https://www.instagram.com/postta.in" className="text-rose-600 hover:underline">@postta.in</a>
-          <br />
-          💬 WhatsApp: <a href="https://wa.me/919335748094" className="text-rose-600 hover:underline">Chat on WhatsApp</a>
-          <br />
-          📞 Phone: +91 9335748094
+        <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
+          We print on <strong>200 GSM premium paper</strong> with a glossy powder finish. Every poster feels thick, shiny, and built to last. Not the thin, floppy prints you see elsewhere.
         </p>
+        <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
+          Prices start at <strong>{"\u20B9"}22 for A6 cards</strong> and go up to <strong>{"\u20B9"}159 for A3 posters</strong>. We also do <strong>custom posters</strong> &mdash; upload any image and we'll print it for you.
+        </p>
+      </div>
+
+      {/* What we do */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-12">
+        {[
+          { icon: "\uD83C\uDFA8", text: "80+ Designs" },
+          { icon: "\uD83D\uDCC4", text: "200 GSM Paper" },
+          { icon: "\uD83D\uDE9A", text: "All India Delivery" },
+          { icon: "\uD83D\uDCB5", text: "COD Available" },
+        ].map((item, i) => (
+          <div key={i} className="text-center p-4 bg-gray-50 border border-gray-200">
+            <span className="text-2xl block mb-1">{item.icon}</span>
+            <p className="text-xs font-bold text-gray-900">{item.text}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Values */}
+      <div className="bg-gray-950 text-white p-6 sm:p-10 mb-12">
+        <h2 className="text-xl sm:text-2xl font-black mb-4">WHY WE EXIST</h2>
+        <div className="space-y-4 text-sm text-gray-300">
+          <p>Posters should be <strong className="text-white">affordable</strong>. Not everyone can spend {"\u20B9"}500 on a single print.</p>
+          <p>Posters should be <strong className="text-white">premium quality</strong>. Cheap doesn't mean low quality.</p>
+          <p>Posters should be <strong className="text-white">personal</strong>. Your wall, your interests, your world.</p>
+          <p>Posters should <strong className="text-white">ship fast</strong>. 24-48 hour dispatch, everywhere in India.</p>
+        </div>
+      </div>
+
+      {/* CTA */}
+      <div className="text-center">
+        <h2 className="text-xl sm:text-2xl font-black text-gray-900 mb-3">Ready to build your wall?</h2>
+        <p className="text-sm text-gray-500 mb-5">Pick what you love. Mix it together.</p>
+        <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          <Link href="/products" className="bg-rose-600 text-white px-8 py-3 font-bold text-sm hover:bg-rose-700 transition-colors">Shop Posters &rarr;</Link>
+          <Link href="/custom" className="bg-white text-gray-900 px-8 py-3 font-bold text-sm border-2 border-gray-200 hover:border-rose-300 transition-colors">Make Your Own</Link>
+        </div>
       </div>
     </div>
   );

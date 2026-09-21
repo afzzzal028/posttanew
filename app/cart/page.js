@@ -177,7 +177,21 @@ export default function CartPage() {
               <div className="flex justify-between"><span className="text-gray-500">Subtotal</span><span className="font-medium">₹{totalPrice}</span></div>
               {discount > 0 && <div className="flex justify-between text-green-600 font-medium"><span>Discount</span><span>-₹{discount}</span></div>}
               <div className="flex justify-between"><span className="text-gray-500">Shipping</span>{shipping === 0 ? <span className="text-green-600 font-medium">FREE</span> : <span className="font-medium">₹{shipping}</span>}</div>
-              {totalPrice < 499 && <p className="text-[10px] text-amber-600 bg-amber-50 p-1.5">Add ₹{499 - totalPrice} more for free shipping!</p>}
+              {totalPrice < 499 ? (
+                <div className="bg-amber-50 border border-amber-200 p-2.5">
+                  <div className="flex items-center justify-between mb-1.5">
+                    <p className="text-[10px] font-bold text-amber-800">Add {"\u20B9"}{499 - totalPrice} more for FREE SHIPPING</p>
+                    <p className="text-[10px] font-bold text-amber-600">{"\u20B9"}{totalPrice} / {"\u20B9"}499</p>
+                  </div>
+                  <div className="w-full bg-amber-200 rounded-full h-2">
+                    <div className="bg-amber-500 h-2 rounded-full transition-all duration-500" style={{ width: `${Math.min((totalPrice / 499) * 100, 100)}%` }} />
+                  </div>
+                </div>
+              ) : (
+                <div className="bg-green-50 border border-green-200 p-2.5 text-center">
+                  <p className="text-[10px] font-bold text-green-700">FREE SHIPPING UNLOCKED</p>
+                </div>
+              )}
               <div className="border-t border-gray-200 pt-2 flex justify-between"><span className="font-black text-base text-gray-900">Total</span><span className={`font-black text-base ${discount > 0 ? "text-green-600" : "text-rose-600"}`}>₹{finalTotal}</span></div>
               {discount > 0 && <p className="text-[10px] text-green-600 text-center bg-green-50 p-1.5 font-medium">You save ₹{discount}!</p>}
             </div>

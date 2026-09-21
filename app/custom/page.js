@@ -2,10 +2,10 @@
 import { useState, useRef } from "react";
 
 const sizes = [
-  { id: "A6", label: "A6 Card", price: 39, note: "10.5 × 14.8 cm" },
-  { id: "A5", label: "A5 Poster", price: 89, note: "14.8 × 21 cm" },
-  { id: "A4", label: "A4 Poster", price: 139, note: "21 × 29.7 cm" },
-  { id: "A3", label: "A3 Poster", price: 189, note: "29.7 × 42 cm" },
+  { id: "A6", label: "A6 Card", price: 22, note: "10.5 x 14.8 cm" },
+  { id: "A5", label: "A5 Poster", price: 69, note: "14.8 x 21 cm" },
+  { id: "A4", label: "A4 Poster", price: 109, note: "21 x 29.7 cm" },
+  { id: "A3", label: "A3 Poster", price: 159, note: "29.7 x 42 cm" },
 ];
 
 export default function CustomPage() {
@@ -102,9 +102,16 @@ export default function CustomPage() {
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">
       {/* Hero */}
-      <div className="text-center mb-8">
-        <h1 className="text-3xl sm:text-4xl font-black text-gray-900 mb-2">Custom Poster</h1>
-        <p className="text-gray-500 text-sm max-w-md mx-auto">Upload your photo, choose a size, and we&apos;ll print it on premium 200gsm paper with a powder finish.</p>
+      <div className="text-center mb-6">
+        <h1 className="text-3xl sm:text-4xl font-black text-gray-900 mb-2">MAKE YOUR OWN POSTER</h1>
+        <p className="text-gray-500 text-sm max-w-md mx-auto mb-4">Upload your photo, choose a size, and we'll print it on premium 200gsm paper with a powder finish.</p>
+        <div className="flex flex-wrap justify-center gap-2 sm:gap-3 text-[10px] sm:text-xs text-gray-600">
+          <span className="bg-rose-100 text-rose-700 px-3 py-1 font-bold rounded-full">1. Upload</span>
+          <span className="bg-gray-100 text-gray-500 px-3 py-1 rounded-full">2. Choose Size</span>
+          <span className="bg-gray-100 text-gray-500 px-3 py-1 rounded-full">3. Preview</span>
+          <span className="bg-gray-100 text-gray-500 px-3 py-1 rounded-full">4. Add to Cart</span>
+          <span className="bg-gray-100 text-gray-500 px-3 py-1 rounded-full">5. Checkout</span>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -182,7 +189,20 @@ export default function CustomPage() {
             <div className="flex justify-between"><span className="text-gray-500">Quantity</span><span className="font-medium">{quantity}</span></div>
             <div className="flex justify-between"><span className="text-gray-500">Subtotal</span><span className="font-medium">₹{price}</span></div>
             <div className="flex justify-between"><span className="text-gray-500">Shipping</span>{shipping === 0 ? <span className="text-green-600 font-medium">FREE</span> : <span className="font-medium">₹{shipping}</span>}</div>
-            {price < 499 && <p className="text-[10px] text-amber-600 bg-amber-50 p-1.5">Add ₹{499 - price} more for free shipping!</p>}
+            {price < 499 ? (
+              <div className="bg-amber-50 border border-amber-200 p-2">
+                <div className="flex items-center justify-between mb-1">
+                  <p className="text-[10px] font-bold text-amber-800">Add {"\u20B9"}{499 - price} more for FREE SHIPPING</p>
+                </div>
+                <div className="w-full bg-amber-200 rounded-full h-1.5">
+                  <div className="bg-amber-500 h-1.5 rounded-full transition-all" style={{ width: `${Math.min((price / 499) * 100, 100)}%` }} />
+                </div>
+              </div>
+            ) : (
+              <div className="bg-green-50 border border-green-200 p-2 text-center">
+                <p className="text-[10px] font-bold text-green-700">FREE SHIPPING UNLOCKED</p>
+              </div>
+            )}
             <div className="border-t border-gray-200 pt-2 flex justify-between"><span className="font-black text-gray-900">Total</span><span className="font-black text-rose-600">₹{total}</span></div>
           </div>
 

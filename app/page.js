@@ -1,303 +1,333 @@
-"use client";
+﻿"use client";
 import Link from "next/link";
 import ProductCard from "@/components/ProductCard";
 import { categories } from "@/data/products";
 import { useState, useEffect } from "react";
 
-const defaultSections = [
-  { id: "hero", type: "hero", title: "Transform Your Wall", subtitle: "in Minutes", bg: "", active: true },
-  { id: "custom", type: "custom", title: "Custom Poster", subtitle: "Upload your photo → Choose size → We print & ship", bg: "", active: true },
-  { id: "marquee", type: "marquee", title: "Buy 2 A3 Get 4 Posters FREE", subtitle: "Use code COMBO2A3", bg: "", bgColor: "#e11d48", textColor: "#ffffff", active: true },
-  { id: "rooms", type: "rooms", title: "Room Inspiration", subtitle: "See how POSTTA transforms real rooms", bg: "", active: true },
-  { id: "bestsellers", type: "products", title: "Best Sellers", subtitle: "Our most popular posters", filterType: "best", bg: "", active: true },
-  { id: "combos", type: "combos", title: "Combo Offers", subtitle: "Save More", bg: "", active: true },
-  { id: "newarrivals", type: "products", title: "New Arrivals", subtitle: "Fresh drops this week", filterType: "new", bg: "", active: true },
-  { id: "categories", type: "categories", title: "Browse Categories", subtitle: "", bg: "", active: true },
-  { id: "trust", type: "trust", title: "Why POSTTA", subtitle: "", bg: "", active: true },
-  { id: "cta", type: "cta", title: "Ready to Transform Your Wall?", subtitle: "Browse 80+ designs across Cars, Anime, Gaming, Sports & more.", bg: "", active: true },
+const bundles = [
+  { label: "3 A4 Posters", price: 249, original: 327, count: 3, size: "A4" },
+  { label: "5 A4 Posters", price: 399, original: 545, count: 5, size: "A4" },
+  { label: "10 A4 Posters", price: 699, original: 1090, count: 10, size: "A4" },
+  { label: "5+1 FREE A5", price: 250, original: 414, count: 6, size: "A5" },
 ];
 
-const defaultRooms = [
-  { id: 1, src: "/mockups/room-1.svg", title: "Car Enthusiast Setup", desc: "16 A4 posters + 6 A6 cards" },
-  { id: 2, src: "/mockups/room-2.svg", title: "Gaming Room Dark", desc: "20 A4 posters + 10 A6 cards" },
-  { id: 3, src: "/mockups/room-3.svg", title: "Minimalist Bedroom", desc: "12 A4 posters + 8 A6 cards" },
+const roomWalls = [
+  { id: "football", title: "Football Wall", count: 6, price: 399, icon: "\u26BD", gradient: "#16a34a, #166534" },
+  { id: "f1", title: "F1 Wall", count: 5, price: 349, icon: "\uD83C\uDFCE\uFE0F", gradient: "#dc2626, #991b1b" },
+  { id: "cars", title: "Cars Wall", count: 5, price: 349, icon: "\uD83D\uDE97", gradient: "#374151, #111827" },
+  { id: "anime", title: "Anime Wall", count: 6, price: 399, icon: "\u26E9\uFE0F", gradient: "#ea580c, #dc2626" },
+  { id: "gaming", title: "Gaming Wall", count: 5, price: 349, icon: "\uD83C\uDFAE", gradient: "#9333ea, #4338ca" },
+  { id: "movies", title: "Movies Wall", count: 5, price: 349, icon: "\uD83C\uDFAC", gradient: "#ca8a04, #92400e" },
 ];
 
-function HeroSection({ sec }) {
-  return (
-    <section className="relative" style={sec.bg ? { background: `url(${sec.bg}) center/cover no-repeat` } : { background: "linear-gradient(135deg, #fff1f2, #ffffff, #fff7ed)" }}>
-      {sec.bg && <div className="absolute inset-0 bg-black/40" />}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-16 relative z-10">
-        <div className="text-center">
-          <span className="inline-block bg-rose-100/90 text-rose-700 text-[10px] sm:text-xs font-bold px-3 py-1 uppercase tracking-wider mb-3">200gsm Premium Quality</span>
-          <h1 className="text-3xl sm:text-5xl md:text-6xl font-black text-gray-900 mb-3 sm:mb-5 leading-tight" style={sec.bg ? { color: "#fff" } : {}}>
-            {sec.title}<br />
-            <span className="text-rose-600">{sec.subtitle}</span>
-          </h1>
-          <p className="text-sm sm:text-lg mb-5 sm:mb-7 max-w-xl mx-auto px-4" style={sec.bg ? { color: "#ddd" } : { color: "#666" }}>
-            Premium posters & collectible cards. Cars, Anime, Gaming, Sports & more. A6 cards from just <span className="font-bold text-rose-400">₹39</span>
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center px-4">
-            <Link href="/products" className="bg-rose-600 text-white px-6 py-3 font-bold text-sm sm:text-base hover:bg-rose-700 transition-colors">Shop All Posters</Link>
-            <Link href="/products?category=cars" className="bg-white text-gray-900 px-6 py-3 font-bold text-sm sm:text-base border-2 border-gray-200 hover:border-rose-300 transition-colors">Cars & Bikes</Link>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
+const customerReviews = [
+  { name: "Arjun M.", city: "Mumbai", text: "Bought the football wall pack. Ronaldo + Messi + Dhoni looks insane together. Paper quality is thick and glossy.", rating: 5 },
+  { name: "Priya S.", city: "Delhi", text: "Anime wall is fire. Gojo + Naruto + Luffy. My friends think I got them printed professionally.", rating: 5 },
+  { name: "Karthik R.", city: "Bangalore", text: "Custom poster of my dog came out amazing. 200 GSM paper is no joke, feels premium. Will order again.", rating: 5 },
+  { name: "Sneha K.", city: "Pune", text: "Bought car posters for my brother's room. He loved it. The A4 size is perfect, not too big not too small.", rating: 4 },
+];
 
-function CustomSection({ sec }) {
-  return (
-    <section className="bg-gray-900 relative" style={sec.bg ? { background: `url(${sec.bg}) center/cover` } : {}}>
-      {sec.bg && <div className="absolute inset-0 bg-black/50" />}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8 relative z-10">
-        <Link href="/custom" className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6 group">
-          <div className="flex-1 text-center sm:text-left">
-            <span className="inline-block bg-amber-500 text-white text-[10px] font-bold px-2 py-0.5 uppercase mb-2">New</span>
-            <h2 className="text-xl sm:text-2xl font-black text-white mb-1">{sec.title}</h2>
-            <p className="text-xs sm:text-sm text-gray-400">{sec.subtitle}</p>
-          </div>
-          <div className="flex items-center gap-3">
-            <div className="text-right">
-              <p className="font-black text-white text-lg">₹39</p>
-              <p className="text-[10px] text-gray-400">Starting from</p>
-            </div>
-            <div className="w-10 h-10 bg-rose-600 flex items-center justify-center group-hover:bg-rose-700 transition-colors">
-              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </div>
-          </div>
-        </Link>
-      </div>
-    </section>
-  );
-}
+const trustItems = [
+  { icon: "\uD83D\uDCC4", text: "200 GSM Paper" },
+  { icon: "\uD83D\uDCE6", text: "COD Available" },
+  { icon: "\u26A1", text: "24-48H Dispatch" },
+  { icon: "\uD83D\uDE9A", text: "Free Shipping 499+" },
+  { icon: "\uD83D\uDD04", text: "Replacement for Damage" },
+];
 
-function MarqueeSection({ sec }) {
-  return (
-    <section className="relative overflow-hidden" style={{ background: sec.bg ? `url(${sec.bg}) center/cover` : sec.bgColor || "#e11d48" }}>
-      {sec.bg && <div className="absolute inset-0 bg-black/30" />}
-      <div className="relative z-10 py-2 px-4 text-center">
-        <p className="text-sm sm:text-base font-bold whitespace-nowrap" style={{ color: sec.textColor || "#fff" }}>
-          {sec.title} — {sec.subtitle}
-        </p>
-      </div>
-    </section>
-  );
-}
-
-function RoomsSection({ sec, sections }) {
-  return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
-      <div className="flex items-center justify-between mb-4 sm:mb-6">
-        <div>
-          <h2 className="text-xl sm:text-2xl font-black text-gray-900">{sec.title}</h2>
-          <p className="text-xs sm:text-sm text-gray-500 mt-1">{sec.subtitle}</p>
-        </div>
-        <span className="bg-rose-100 text-rose-700 text-[10px] sm:text-xs font-bold px-2 py-1 uppercase">Download & Inspo</span>
-      </div>
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-        {(sections.length > 0 ? sections : defaultRooms).filter((s) => s.active !== false).map((room) => {
-          const Wrapper = room.link ? Link : "div";
-          const wrapperProps = room.link ? { href: room.link } : {};
-          return (
-            <Wrapper key={room.id} {...wrapperProps} className="group relative overflow-hidden border border-gray-200 bg-white">
-              <div className="relative aspect-[3/2]">
-                {room.image_url || room.src ? (
-                  <img src={room.image_url || room.src} alt={room.title} className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500" />
-                ) : (
-                  <div className="w-full h-full bg-gray-100 flex items-center justify-center"><span className="text-3xl">🖼️</span></div>
-                )}
-              </div>
-              <div className="p-3 sm:p-4">
-                <p className="font-bold text-sm sm:text-base text-gray-900">{room.title}</p>
-                <p className="text-xs sm:text-sm text-gray-500">{room.desc || room.subtitle}</p>
-                {room.link ? (
-                  <span className="inline-block mt-2 text-xs sm:text-sm font-bold text-rose-600 hover:underline">Shop This Look →</span>
-                ) : (
-                  <Link href="/products" className="inline-block mt-2 text-xs sm:text-sm font-bold text-rose-600 hover:underline">Shop This Look →</Link>
-                )}
-              </div>
-            </Wrapper>
-          );
-        })}
-      </div>
-    </section>
-  );
-}
-
-function ProductsSection({ sec, products }) {
-  const items = sec.filterType === "best"
-    ? products.filter((p) => ["cars", "anime", "gaming"].includes(p.category)).slice(0, 8)
-    : sec.filterType === "new"
-      ? products.slice(16, 24)
-      : products.slice(0, 8);
-  return (
-    <section className="bg-white border-y border-gray-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12" style={sec.bg ? { background: `url(${sec.bg}) center/cover`, borderRadius: "12px" } : {}}>
-        <div className="flex items-center justify-between mb-4 sm:mb-6">
-          <h2 className="text-xl sm:text-2xl font-black text-gray-900">{sec.title}</h2>
-          <Link href="/products" className="text-rose-600 font-semibold text-xs sm:text-sm hover:underline">View All →</Link>
-        </div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-4">
-          {(items.length > 0 ? items : products.slice(0, 8)).map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function CombosSection({ sec, banners }) {
-  if (!banners || banners.length === 0) return null;
-  return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
-      <div className="flex items-center justify-between mb-4 sm:mb-6">
-        <h2 className="text-xl sm:text-2xl font-black text-gray-900">{sec.title}</h2>
-        <span className="bg-rose-100 text-rose-700 text-[10px] sm:text-xs font-bold px-2 py-1 uppercase">{sec.subtitle}</span>
-      </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-        {banners.map((b) => {
-          const features = b.features || ["badge", "savings", "coupon"];
-          const linkHref = b.product_ids?.length > 0 ? `/products?offer=${b.id}` : `/products?combo=${b.coupon_code}`;
-          return (
-            <div key={b.id} className="bg-gray-50 border border-gray-200 p-4 sm:p-5 hover:shadow-md transition-shadow">
-              <div className="flex items-center justify-between mb-2">
-                {features.includes("badge") && b.badge_text && <span className="text-white text-[10px] font-bold px-2 py-0.5" style={{ background: b.bg_color }}>{b.badge_text}</span>}
-                {features.includes("coupon") && b.coupon_code && <span className="text-[10px] text-gray-400 font-mono">{b.coupon_code}</span>}
-              </div>
-              <p className="text-sm sm:text-base font-bold text-gray-900 mb-1">{b.title}</p>
-              <p className="text-xs sm:text-sm text-green-600 font-medium mb-3">+ {b.subtitle}</p>
-              {features.includes("price") && (
-                <div className="flex items-baseline gap-2 mb-3">
-                  <span className="text-xl sm:text-2xl font-black text-rose-600">₹{b.price}</span>
-                  {features.includes("strikethrough") && b.original_price > 0 && <span className="text-sm line-through text-gray-400">₹{b.original_price}</span>}
-                </div>
-              )}
-              {b.product_ids?.length > 0 && <p className="text-[10px] text-gray-400 mb-2">{b.product_ids.length} products in this offer</p>}
-              <Link href={linkHref} className="block w-full py-2 bg-rose-600 text-white font-bold text-xs sm:text-sm text-center hover:bg-rose-700 transition-colors">
-                {b.product_ids?.length > 0 ? "View Offer Products" : "Shop This Combo"}
-              </Link>
-            </div>
-          );
-        })}
-      </div>
-    </section>
-  );
-}
-
-function CategoriesSection({ sec }) {
-  return (
-    <section className="bg-gray-50 border-t border-gray-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-10" style={sec.bg ? { background: `url(${sec.bg}) center/cover` } : {}}>
-        <h2 className="text-lg sm:text-xl font-black text-gray-900 mb-4 sm:mb-6">{sec.title}</h2>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 sm:gap-3">
-          {categories.map((cat) => (
-            <Link key={cat.id} href={`/products?category=${cat.id}`} className="bg-white border border-gray-200 p-3 text-center hover:shadow-md hover:border-rose-200 transition-all group">
-              <span className="text-2xl block mb-1 group-hover:scale-110 transition-transform">{cat.icon}</span>
-              <p className="font-semibold text-xs sm:text-sm text-gray-900">{cat.name}</p>
-            </Link>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function TrustSection({ sec }) {
-  const badges = [
-    { icon: "🚚", title: "Free Shipping", desc: "On orders above ₹499" },
-    { icon: "💰", title: "COD Available", desc: "Cash on Delivery" },
-    { icon: "✨", title: "200gsm Quality", desc: "Thick & Shiny Paper" },
-    { icon: "⚡", title: "Fast Dispatch", desc: "Ships in 24-48 hours" },
-  ];
-  return (
-    <section className="border-t border-gray-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-10" style={sec.bg ? { background: `url(${sec.bg}) center/cover` } : {}}>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
-          {badges.map((badge, i) => (
-            <div key={i} className="flex flex-col items-center text-center gap-2">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-rose-100 flex items-center justify-center"><span className="text-xl sm:text-2xl">{badge.icon}</span></div>
-              <div><p className="font-bold text-xs sm:text-sm text-gray-900">{badge.title}</p><p className="text-[10px] sm:text-xs text-gray-500">{badge.desc}</p></div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function CtaSection({ sec }) {
-  return (
-    <section className="relative" style={sec.bg ? { background: `url(${sec.bg}) center/cover` } : { background: "#e11d48" }}>
-      {sec.bg && <div className="absolute inset-0 bg-rose-600/80" />}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-12 text-center relative z-10">
-        <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-white mb-3 sm:mb-4">{sec.title}</h2>
-        <p className="text-rose-100 text-sm sm:text-base mb-5 sm:mb-6 max-w-xl mx-auto px-4">{sec.subtitle}</p>
-        <Link href="/products" className="inline-block bg-white text-rose-600 px-6 sm:px-8 py-3 font-bold text-sm sm:text-lg hover:bg-rose-50 transition-colors">Shop Now</Link>
-      </div>
-    </section>
-  );
-}
-
-const sectionComponents = {
-  hero: HeroSection,
-  custom: CustomSection,
-  marquee: MarqueeSection,
-  rooms: RoomsSection,
-  products: ProductsSection,
-  combos: CombosSection,
-  categories: CategoriesSection,
-  trust: TrustSection,
-  cta: CtaSection,
-  footer: null,
-};
+const heroCategories = ["Anime", "Football", "F1", "Cars", "Gaming", "Movies", "Music"];
 
 export default function Home() {
   const [products, setProducts] = useState([]);
+  const [bestSellers, setBestSellers] = useState([]);
+  const [newItems, setNewItems] = useState([]);
   const [banners, setBanners] = useState([]);
-  const [sections, setSections] = useState([]);
   const [bannerSpeed, setBannerSpeed] = useState(30);
-  const [pageSections, setPageSections] = useState(null);
 
   useEffect(() => {
-    fetch("/api/products")
-      .then((res) => res.json())
-      .then((data) => { if (data.success) setProducts(data.data); })
-      .catch(() => {});
-    fetch("/api/banners")
-      .then((res) => res.json())
-      .then((data) => { if (data.success) { setBanners(data.data || []); if (data.speed) setBannerSpeed(data.speed); } })
-      .catch(() => {});
-    fetch("/api/sections")
-      .then((res) => res.json())
-      .then((data) => { if (data.success) setSections(data.data || []); })
-      .catch(() => {});
-    fetch("/api/settings?key=homepage")
-      .then((res) => res.json())
-      .then((data) => { if (data.success && data.data?.pageSections) setPageSections(data.data.pageSections); })
-      .catch(() => {});
+    fetch("/api/products").then((r) => r.json()).then((d) => {
+      if (!d.success) return;
+      const all = d.data || [];
+      setProducts(all);
+      setBestSellers(all.filter((p) => ["cars", "anime", "gaming"].includes(p.category)).slice(0, 8));
+      setNewItems(all.slice(0, 8));
+    }).catch(() => {});
+    fetch("/api/banners").then((r) => r.json()).then((d) => {
+      if (d.success) { setBanners(d.data || []); if (d.speed) setBannerSpeed(d.speed); }
+    }).catch(() => {});
   }, []);
 
-  const activeSections = (pageSections || defaultSections).filter((s) => s.active !== false);
+  const savingsPct = (o, p) => Math.round(((o - p) / o) * 100);
 
   return (
-    <div>
-      {activeSections.map((sec) => {
-        if (sec.type === "marquee" && banners.length === 0) return null;
-        if (sec.type === "combos" && banners.length === 0) return null;
-        if (sec.type === "footer") return null;
-        const Comp = sectionComponents[sec.type];
-        if (!Comp) return null;
-        return <Comp key={sec.id} sec={sec} products={products} banners={banners} sections={sections} bannerSpeed={bannerSpeed} />;
-      })}
+    <div className="pb-20 sm:pb-0">
+      {/* HERO */}
+      <section className="relative bg-gray-950 overflow-hidden">
+        <div className="absolute inset-0 opacity-20" style={{ backgroundImage: "radial-gradient(circle at 30% 50%, #e11d48 0%, transparent 50%), radial-gradient(circle at 70% 50%, #f97316 0%, transparent 50%)" }} />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-20 relative z-10">
+          <div className="text-center">
+            <h1 className="text-4xl sm:text-6xl md:text-7xl font-black text-white mb-3 tracking-tight leading-none">
+              YOUR WALL.<br /><span className="text-rose-500">YOUR WORLD.</span>
+            </h1>
+            <p className="text-sm sm:text-lg text-gray-300 mb-4 max-w-xl mx-auto">Posters for the things you actually love.</p>
+            <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-6">
+              {heroCategories.map((c) => (
+                <span key={c} className="text-[10px] sm:text-xs font-bold text-gray-400 border border-gray-700 px-3 py-1 rounded-full hover:text-white hover:border-gray-500 transition-colors">{c}</span>
+              ))}
+            </div>
+            <div className="flex flex-wrap justify-center gap-4 sm:gap-6 mb-6 text-white">
+              <div className="text-center"><p className="text-xl sm:text-2xl font-black">22</p><p className="text-[9px] sm:text-[10px] text-gray-400 uppercase tracking-wider">A6 From</p></div>
+              <div className="text-center"><p className="text-xl sm:text-2xl font-black">109</p><p className="text-[9px] sm:text-[10px] text-gray-400 uppercase tracking-wider">A4 From</p></div>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Link href="/products" className="bg-rose-600 text-white px-8 py-3.5 font-bold text-sm sm:text-base hover:bg-rose-700 transition-colors text-center">SHOP POSTERS &rarr;</Link>
+              <Link href="/custom" className="bg-white/10 text-white px-8 py-3.5 font-bold text-sm sm:text-base border border-white/20 hover:bg-white/20 transition-colors text-center">MAKE YOUR OWN</Link>
+            </div>
+          </div>
+        </div>
+        <div className="border-t border-white/10 bg-white/5 backdrop-blur">
+          <div className="max-w-7xl mx-auto px-4 py-3">
+            <div className="flex flex-wrap justify-center gap-3 sm:gap-6">
+              {trustItems.map((t, i) => (
+                <div key={i} className="flex items-center gap-1.5">
+                  <span className="text-xs sm:text-sm">{t.icon}</span>
+                  <span className="text-[9px] sm:text-[10px] font-bold text-gray-300 uppercase tracking-wider">{t.text}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
 
-      {activeSections.some((s) => s.type === "marquee") && banners.length > 0 && (
-        <style jsx>{`@keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-33.33%); } }`}</style>
+      {/* CUSTOM POSTER BANNER */}
+      <section className="bg-gray-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-5">
+          <Link href="/custom" className="flex flex-col sm:flex-row items-center justify-between gap-3 group">
+            <div className="flex items-center gap-3">
+              <span className="bg-amber-500 text-white text-[9px] font-bold px-2 py-0.5 uppercase">New</span>
+              <div>
+                <p className="text-sm font-black text-white">Custom Poster</p>
+                <p className="text-[10px] text-gray-400">Upload photo &rarr; Choose size &rarr; We print &amp; ship</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <p className="font-black text-white text-base">22</p>
+              <div className="w-8 h-8 bg-rose-600 flex items-center justify-center group-hover:bg-rose-700 transition-colors">
+                <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+              </div>
+            </div>
+          </Link>
+        </div>
+      </section>
+
+      {/* MARQUEE */}
+      {banners.length > 0 && (
+        <section className="bg-gray-900 border-t border-white/5 overflow-hidden">
+          <div className="flex items-center gap-4 py-3" style={{ animation: `marquee ${bannerSpeed}s linear infinite` }}>
+            {[...banners, ...banners, ...banners].map((b, i) => {
+              const features = b.features || ["badge", "savings", "coupon"];
+              const linkHref = b.product_ids?.length > 0 ? `/products?offer=${b.id}` : `/products?combo=${b.coupon_code}`;
+              return (
+                <Link key={i} href={linkHref} className="flex-shrink-0 text-white px-5 py-2 flex items-center gap-3 hover:opacity-90 transition-opacity" style={{ background: b.bg_color, color: b.text_color }}>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-bold text-xs whitespace-nowrap">{b.title}</p>
+                    {features.includes("coupon") && b.coupon_code && <p className="text-[9px] font-mono opacity-60 whitespace-nowrap">{b.coupon_code}</p>}
+                    <p className="text-[10px] whitespace-nowrap" style={{ color: b.subtitle_color }}>+ {b.subtitle}</p>
+                  </div>
+                  {features.includes("price") && (
+                    <div className="text-right shrink-0">
+                      <p className="font-black text-sm whitespace-nowrap">{b.price}</p>
+                      {features.includes("strikethrough") && b.original_price > 0 && <p className="text-[10px] line-through whitespace-nowrap opacity-50">{b.original_price}</p>}
+                    </div>
+                  )}
+                  {features.includes("badge") && b.badge_text && <span className="text-[9px] font-bold px-2 py-0.5 whitespace-nowrap shrink-0" style={{ background: b.badge_color }}>{b.badge_text}</span>}
+                </Link>
+              );
+            })}
+          </div>
+          <style jsx>{`@keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-33.33%); } }`}</style>
+        </section>
       )}
+
+      {/* BUILD YOUR WALL */}
+      <section className="bg-white border-y border-gray-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl sm:text-3xl font-black text-gray-900 mb-2">BUILD YOUR WALL</h2>
+            <p className="text-sm text-gray-500">Mix &amp; match any designs. The more you buy, the more you save.</p>
+          </div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+            {bundles.map((b) => (
+              <Link key={b.label} href="/products" className="group bg-gray-50 border border-gray-200 p-5 text-center hover:border-rose-300 hover:shadow-md transition-all">
+                <p className="text-[10px] font-bold text-rose-600 uppercase tracking-wider mb-1">{b.count} Posters Pack</p>
+                <p className="text-xl sm:text-2xl font-black text-gray-900 mb-1">{b.price}</p>
+                <p className="text-[10px] text-gray-400 line-through mb-1">{b.original}</p>
+                <p className="text-[10px] font-bold text-green-600 mb-3">SAVE {savingsPct(b.original, b.price)}%</p>
+                <div className="bg-gray-900 text-white py-2 text-xs font-bold group-hover:bg-rose-600 transition-colors">{b.label} &rarr;</div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* SHOP BY CATEGORY */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
+        <h2 className="text-xl sm:text-2xl font-black text-gray-900 mb-6">SHOP BY CATEGORY</h2>
+        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-7 gap-2 sm:gap-3">
+          {categories.map((cat) => (
+            <Link key={cat.id} href={`/products?category=${cat.id}`} className="bg-white border border-gray-200 p-3 sm:p-4 text-center hover:shadow-md hover:border-rose-300 transition-all group">
+              <span className="text-2xl sm:text-3xl block mb-1 group-hover:scale-110 transition-transform">{cat.icon}</span>
+              <p className="font-bold text-[10px] sm:text-xs text-gray-900">{cat.name}</p>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* BEST SELLERS */}
+      <section className="bg-white border-y border-gray-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl sm:text-2xl font-black text-gray-900">BEST SELLERS</h2>
+            <Link href="/products" className="text-rose-600 font-bold text-xs sm:text-sm hover:underline">View All &rarr;</Link>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-4">
+            {bestSellers.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* SEE IT ON A WALL */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
+        <h2 className="text-2xl sm:text-3xl font-black text-gray-900 mb-2">SEE IT ON A WALL</h2>
+        <p className="text-sm text-gray-500 mb-6">Build complete walls. Pick a theme, get the look.</p>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+          {roomWalls.map((w) => (
+            <Link key={w.id} href={`/products?category=${w.id}`} className="group relative overflow-hidden aspect-[3/4] flex flex-col justify-end p-4" style={{ background: `linear-gradient(135deg, ${w.gradient})` }}>
+              <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
+              <div className="relative z-10 text-center">
+                <span className="text-3xl mb-2 block">{w.icon}</span>
+                <p className="text-white font-bold text-sm">{w.title}</p>
+                <p className="text-white/70 text-[10px]">{w.count} posters &mdash; {w.price}</p>
+                <span className="inline-block mt-2 text-white text-[10px] font-bold border-b border-white/50 pb-0.5 group-hover:border-white transition-colors">SHOP THIS WALL &rarr;</span>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* COMBO OFFERS */}
+      {banners.length > 0 && (
+        <section className="bg-gray-50 border-y border-gray-100">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl sm:text-2xl font-black text-gray-900">COMBO OFFERS</h2>
+              <span className="bg-rose-100 text-rose-700 text-[10px] font-bold px-2 py-1 uppercase">Save More</span>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              {banners.map((b) => {
+                const features = b.features || ["badge", "savings", "coupon"];
+                const linkHref = b.product_ids?.length > 0 ? `/products?offer=${b.id}` : `/products?combo=${b.coupon_code}`;
+                return (
+                  <div key={b.id} className="bg-white border border-gray-200 p-5 hover:shadow-md transition-shadow">
+                    <div className="flex items-center justify-between mb-2">
+                      {features.includes("badge") && b.badge_text && <span className="text-white text-[10px] font-bold px-2 py-0.5" style={{ background: b.bg_color }}>{b.badge_text}</span>}
+                      {features.includes("coupon") && b.coupon_code && <span className="text-[10px] text-gray-400 font-mono">{b.coupon_code}</span>}
+                    </div>
+                    <p className="text-sm font-bold text-gray-900 mb-1">{b.title}</p>
+                    <p className="text-xs text-green-600 font-medium mb-3">+ {b.subtitle}</p>
+                    {features.includes("price") && (
+                      <div className="flex items-baseline gap-2 mb-3">
+                        <span className="text-xl font-black text-rose-600">{b.price}</span>
+                        {features.includes("strikethrough") && b.original_price > 0 && <span className="text-sm line-through text-gray-400">{b.original_price}</span>}
+                      </div>
+                    )}
+                    <Link href={linkHref} className="block w-full py-2 bg-rose-600 text-white font-bold text-xs text-center hover:bg-rose-700 transition-colors">
+                      {b.product_ids?.length > 0 ? "View Offer Products" : "Shop This Combo"}
+                    </Link>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* NEW RELEASES */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-xl sm:text-2xl font-black text-gray-900">NEW RELEASES</h2>
+          <Link href="/products" className="text-rose-600 font-bold text-xs sm:text-sm hover:underline">View All &rarr;</Link>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-4">
+          {newItems.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+      </section>
+
+      {/* REAL WALLS. REAL POSTTA. */}
+      <section className="bg-gray-950">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
+          <h2 className="text-2xl sm:text-3xl font-black text-white mb-2 text-center">REAL WALLS. REAL POSTTA.</h2>
+          <p className="text-sm text-gray-400 mb-8 text-center">See what our customers have built.</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {customerReviews.map((r, i) => (
+              <div key={i} className="bg-white/5 border border-white/10 p-5">
+                <div className="flex items-center gap-1 mb-2">
+                  {[...Array(5)].map((_, j) => (
+                    <span key={j} className={`text-xs ${j < r.rating ? "text-yellow-400" : "text-gray-600"}`}>&#9733;</span>
+                  ))}
+                </div>
+                <p className="text-xs text-gray-300 mb-3 leading-relaxed">{r.text}</p>
+                <p className="text-xs font-bold text-white">{r.name}</p>
+                <p className="text-[10px] text-gray-500">{r.city}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* WHY POSTTA */}
+      <section className="bg-white border-y border-gray-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
+          <h2 className="text-xl sm:text-2xl font-black text-gray-900 mb-6 text-center">WHY POSTTA?</h2>
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+            {trustItems.map((t, i) => (
+              <div key={i} className="flex flex-col items-center text-center gap-2">
+                <span className="text-2xl sm:text-3xl">{t.icon}</span>
+                <p className="font-bold text-xs sm:text-sm text-gray-900">{t.text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* MAKE YOUR OWN POSTER */}
+      <section className="bg-rose-600">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-14 text-center">
+          <h2 className="text-2xl sm:text-3xl font-black text-white mb-3">MAKE YOUR OWN POSTER</h2>
+          <p className="text-rose-100 text-sm sm:text-base mb-2">Upload any image. Choose your size. We print &amp; ship in 24-48 hours.</p>
+          <div className="flex flex-wrap justify-center gap-3 sm:gap-4 mb-6 text-white/80 text-xs sm:text-sm">
+            <span>1. Upload</span><span>&rarr;</span>
+            <span>2. Choose Size</span><span>&rarr;</span>
+            <span>3. Preview</span><span>&rarr;</span>
+            <span>4. Add to Cart</span><span>&rarr;</span>
+            <span>5. Checkout</span>
+          </div>
+          <Link href="/custom" className="inline-block bg-white text-rose-600 px-8 py-3.5 font-bold text-sm sm:text-base hover:bg-rose-50 transition-colors">CREATE NOW &rarr;</Link>
+        </div>
+      </section>
+
+      {/* FINAL CTA */}
+      <section className="bg-gray-950">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-14 text-center">
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-white mb-3">Ready to Transform Your Wall?</h2>
+          <p className="text-gray-400 text-sm sm:text-base mb-5 max-w-xl mx-auto px-4">Pick what you love. Mix it together. Build your wall.</p>
+          <Link href="/products" className="inline-block bg-rose-600 text-white px-8 py-3.5 font-bold text-sm sm:text-base hover:bg-rose-700 transition-colors">Shop Now &rarr;</Link>
+        </div>
+      </section>
     </div>
   );
 }
